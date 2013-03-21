@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project basedir="." default="build" name="pubnub">
 	<property environment="env" />
+	<property name="pubnub_jar_file_name" value="Pubnub-3.3.jar"/>
 	<property name="target" value="1.5" />
 	<property name="source" value="1.5" />
 	<path id="pubnub.classpath">
 		<pathelement location="bin" />
-		<pathelement location="lib/async-http-client-1.6.5-shaded.jar" />
 		<pathelement location="lib/junit.jar" />
 		<pathelement location="lib/json.jar" />
 		<pathelement location="lib/slf4j-nop-1.6.2.jar" />
@@ -21,9 +21,10 @@
 	</target>
 	<target name="clean">
 		<delete dir="bin" />
+        <delete file="${pubnub_jar_file_name}" />
 	</target>
 	<target depends="clean" name="cleanall" />
-	<target depends="build-subprojects,build-project,create-examples-jar,create-tests-jar" name="build" />
+	<target depends="build-subprojects,build-project,create-api-jar,create-examples-jar,create-tests-jar" name="build" />
 	<target name="build-subprojects" />
 	<target depends="init" name="build-project">
 		<echo message="${ant.project.name}: ${ant.file}" />
@@ -115,6 +116,12 @@
 	</target>
 	<target name="create-tests-jar">
 		<create-jar jar.type="tests" jar.classname="com.pubnub.tests.PubnubUnitTestRunner" jar.filename="PubnubUnitTest.jar" />
+	</target>
+    <target depends="build-project" name="create-api-jar">
+		<jar destfile="${pubnub_jar_file_name}"
+			basedir="bin"
+			includes="com/pubnub/api/**"
+		/>
 	</target>
 
 </project>

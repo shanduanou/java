@@ -9,14 +9,18 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.ConnectException;
+import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
@@ -34,14 +38,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.ning.http.client.AsyncCompletionHandler;
-import com.ning.http.client.AsyncHttpClient;
-import com.ning.http.client.AsyncHttpClientConfig;
-import com.ning.http.client.AsyncHttpClientConfig.Builder;
-import com.ning.http.client.PerRequestConfig;
-import com.ning.http.client.Request;
-import com.ning.http.client.RequestBuilder;
-import com.ning.http.client.Response;
 
 
 /**
@@ -80,13 +76,12 @@ public class Pubnub {
     private boolean SSL = false;
     private String sessionUUID = "";
     private String parameters = "";
-    private AsyncHttpClient ahc = null;
-    private RequestBuilder rb = null;
     private int PUBNUB_WEBREQUEST_CALLBACK_INTERVAL = 310000;
     private int PUBNUB_NETWORK_CHECK_RETRIES = 50;
     private int PUBNUB_WEBREQUEST_RETRY_INTERVAL = 10000;
     private int PUBNUB_FAST_WEBREQUEST_TIMEOUT = 5000;
     private int PUBNUB_DEFAULT_CONN_TIMEOUT = 10000;
+    private HttpURLConnection connection;
     
     /** Sets wait time for Presence/Subscribe API
      * @param interval Time interval in milliseconds for which the API's like Presence and Subscribe will block
@@ -167,6 +162,8 @@ public class Pubnub {
         
     @SuppressWarnings({ "deprecation"})
     private Request getRequest(List<String> url_components, int requestTimeout) {
+    	
+    	Request req = new Request();
         StringBuilder url = new StringBuilder();
         Iterator<String> url_iterator = url_components.iterator();
         String request_for = url_components.get(0);
@@ -185,24 +182,26 @@ public class Pubnub {
         if (request_for.equals("v2") && request_type.equals("history"))
             url.append(parameters);
         
-        rb = new RequestBuilder("GET");
-        
-        rb.addHeader("V", "3.3");
-        rb.addHeader("User-Agent", "Java");
-        rb.addHeader("Accept-Encoding", "gzip");
-        rb.setUrl(url.toString());
-        
+        req.setUrl(url.toString());
+        Hashtable headers = new Hashtable();
+        headers.put("V", "3.3");
+        headers.put("User-Agent", "Java");
+        headers.put("Accept-Encoding", "gzip");
+        req.setHeaders(headers);
+        req.setConnectionTimeout(PUBNUB_DEFAULT_CONN_TIMEOUT);
         if (requestTimeout > 0) {
-               PerRequestConfig prc = new PerRequestConfig();
-               prc.setRequestTimeoutInMs(requestTimeout);
-               rb.setPerRequestConfig(prc);
-         }
-        return rb.build();
+               req.setRequestTimeout(requestTimeout);
+        } else {
+        	req.setRequestTimeout(PUBNUB_FAST_WEBREQUEST_TIMEOUT);
+        }
+        return req;
     }
     
     protected void finalize() {
-        if (ahc != null)
-            ahc.close();
+        if (connection != null) {
+        	connection.disconnect();
+        	connection = null;
+        }
     }
 
     public String sessionUUID() {
@@ -294,10 +293,7 @@ public class Pubnub {
         } else {
             this.ORIGIN = "http://" + this.ORIGIN;
         }
-        Builder cb = new AsyncHttpClientConfig.Builder();
-        cb.setRequestTimeoutInMs(PUBNUB_WEBREQUEST_CALLBACK_INTERVAL);
-        cb.setConnectionTimeoutInMs(PUBNUB_DEFAULT_CONN_TIMEOUT);
-        ahc = new AsyncHttpClient(cb.build());
+
     }
 
     /**
@@ -558,7 +554,7 @@ public class Pubnub {
                     return;
 
                 // Wait for Message
-                JSONArray response = _request(new PubnubHttpRequest(getRequest(url), errorMessages));
+                JSONArray response = _request(new PubnubHttpRequest(getRequest(url, PUBNUB_WEBREQUEST_CALLBACK_INTERVAL), errorMessages));
                 // Stop Connection?
 
                 if (subscriptions.get(channel) != null
@@ -960,6 +956,21 @@ public class Pubnub {
     }
     
 
+
+    private String readInput(InputStream in) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        byte bytes[] = new byte[1024];
+
+        int n = in.read(bytes);
+
+        while (n != -1) {
+            out.write(bytes, 0, n);
+            n = in.read(bytes);
+        }
+
+        return new String(out.toString());
+    }
+
     /**
      * @param List
      *            <String> request of url directories.
@@ -970,47 +981,40 @@ public class Pubnub {
         String json = "";
  
         try {
-            // Execute Request
-            Future<String> f = ahc.executeRequest(phr.request(),
-                    new AsyncCompletionHandler<String>() {
-
-                @Override
-                public String onCompleted(Response r) throws Exception {
-
-                    String ce = r.getHeader("Content-Encoding");
-                    InputStream resulting_is = null;
-                    InputStream is = r.getResponseBodyAsStream();
-
-                    if (ce != null && ce.equalsIgnoreCase("gzip")) {
-                        // Decoding using 'gzip'
-
-                        try {
-                            resulting_is = new GZIPInputStream(is);
-                        } catch (IOException e) {
-                            resulting_is = is;
-                        } catch (Exception e) {
-                            resulting_is = is;
-                        }
-                    } else {
-                        // Default (encoding is null OR 'identity')
-                        resulting_is = is;
-                    }
-
-                    String line = "", json = "";
-                    BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(resulting_is, "UTF8"));
-
-                    // Read JSON Message
-                    while ((line = reader.readLine()) != null) {
-                        json += line;
-                    }
-
-                    reader.close();
-                    return json;
+        	URL urlobj = new URL(phr.request().getUrl());
+            connection = (HttpURLConnection) urlobj.openConnection();
+            connection.setRequestMethod("GET");
+            Hashtable _headers = phr.request().getHeaders();
+            if (_headers != null) {
+                Enumeration en = _headers.keys();
+                while (en.hasMoreElements()) {
+                    String key = (String) en.nextElement();
+                    String val = (String) _headers.get(key);
+                    connection.addRequestProperty(key, val);
                 }
-            });
-            json = f.get();
-
+            }
+            
+            connection.setReadTimeout(phr.request().getRequestTimeout());
+            connection.setConnectTimeout(phr.request().getRequestTimeout());
+            connection.connect();
+            InputStream is;
+            if(connection.getContentEncoding() == null || !connection.getContentEncoding().equals("gzip")) {
+            	is = connection.getInputStream();
+            	
+            } else {
+            	is = new GZIPInputStream(connection.getInputStream());
+            }
+            json = readInput(is);
+            
+            // Parse JSON String
+            if (json.contains("uuids")) {
+                return new JSONArray().put(json);
+            }
+            try {
+                return new JSONArray(json);
+            } catch (JSONException e) {
+                return new JSONArray().put("Error: Failed JSON Parsing.");
+            }
         }
         catch (ConnectException e) {
             return new JSONArray().put("0").put("0").put("Network Connect Error");
@@ -1025,16 +1029,6 @@ public class Pubnub {
                 jsono.put(s);
             }
             return jsono;
-        }
-
-        // Parse JSON String
-        if (json.contains("uuids")) {
-            return new JSONArray().put(json);
-        }
-        try {
-            return new JSONArray(json);
-        } catch (JSONException e) {
-            return new JSONArray().put("Error: Failed JSON Parsing.");
         }
     }
 
