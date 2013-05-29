@@ -40,6 +40,45 @@ import org.json.JSONObject;
 
 
 
+class Request {
+    private String url;
+    private Hashtable headers;
+    private int requestTimeout;
+    private int connectionTimeout;
+    
+    
+    public void setRequestTimeout(int requestTimeout) {
+        this.requestTimeout = requestTimeout;
+    }
+
+    public void setConnectionTimeout(int connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setHeaders(Hashtable headers) {
+        this.headers = headers;
+        
+    }
+
+    public int getRequestTimeout() {
+        return this.requestTimeout;
+    }
+
+    public Hashtable getHeaders() {
+        return this.headers;
+    }
+
+    public String getUrl() {
+        return this.url;
+    }
+    
+}
+
+
 /**
  * @author Pubnub
  *
@@ -162,8 +201,8 @@ public class Pubnub {
         
     @SuppressWarnings({ "deprecation"})
     private Request getRequest(List<String> url_components, int requestTimeout) {
-    	
-    	Request req = new Request();
+        
+        Request req = new Request();
         StringBuilder url = new StringBuilder();
         Iterator<String> url_iterator = url_components.iterator();
         String request_for = url_components.get(0);
@@ -192,15 +231,15 @@ public class Pubnub {
         if (requestTimeout > 0) {
                req.setRequestTimeout(requestTimeout);
         } else {
-        	req.setRequestTimeout(PUBNUB_FAST_WEBREQUEST_TIMEOUT);
+            req.setRequestTimeout(PUBNUB_FAST_WEBREQUEST_TIMEOUT);
         }
         return req;
     }
     
     protected void finalize() {
         if (connection != null) {
-        	connection.disconnect();
-        	connection = null;
+            connection.disconnect();
+            connection = null;
         }
     }
 
@@ -981,7 +1020,7 @@ public class Pubnub {
         String json = "";
  
         try {
-        	URL urlobj = new URL(phr.request().getUrl());
+            URL urlobj = new URL(phr.request().getUrl());
             connection = (HttpURLConnection) urlobj.openConnection();
             connection.setRequestMethod("GET");
             Hashtable _headers = phr.request().getHeaders();
@@ -996,13 +1035,15 @@ public class Pubnub {
             
             connection.setReadTimeout(phr.request().getRequestTimeout());
             connection.setConnectTimeout(phr.request().getRequestTimeout());
+            connection.addRequestProperty("Cache-Control", "no-cache,max-age=0"); 
+            connection.addRequestProperty("Pragma", "no-cache"); 
             connection.connect();
             InputStream is;
             if(connection.getContentEncoding() == null || !connection.getContentEncoding().equals("gzip")) {
-            	is = connection.getInputStream();
-            	
+                is = connection.getInputStream();
+                
             } else {
-            	is = new GZIPInputStream(connection.getInputStream());
+                is = new GZIPInputStream(connection.getInputStream());
             }
             json = readInput(is);
             

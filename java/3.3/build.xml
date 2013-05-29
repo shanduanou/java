@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project basedir="." default="build" name="pubnub">
 	<property environment="env" />
-	<property name="pubnub_jar_file_name" value="Pubnub-3.3.jar"/>
+	<property name="pubnub_jar_file_name" value="Pubnub-GAE-3.3.jar"/>
 	<property name="target" value="1.5" />
 	<property name="source" value="1.5" />
 	<path id="pubnub.classpath">
