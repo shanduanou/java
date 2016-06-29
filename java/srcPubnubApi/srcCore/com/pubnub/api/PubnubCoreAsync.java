@@ -508,10 +508,39 @@ abstract class PubnubCoreAsync extends PubnubCore implements PubnubAsyncInterfac
         subscribe(args);
     }
 
+    public void presence(String[] channels, Callback callback) throws PubnubException {
+        Hashtable args = new Hashtable(2);
+        String[] presenceChannels = new String[channels.length];
+
+        for (int i = 0; i < channels.length; i++) {
+            presenceChannels[i] = channels[i] + PRESENCE_SUFFIX;
+        }
+
+        args.put("channels", presenceChannels);
+        args.put("callback", callback);
+
+        subscribe(args);
+    }
+
+
     public void channelGroupPresence(String group, Callback callback) throws PubnubException {
         Hashtable args = new Hashtable(2);
 
         args.put("groups", new String[] { group + PRESENCE_SUFFIX });
+        args.put("callback", callback);
+
+        subscribe(args);
+    }
+
+    public void channelGroupPresence(String[] groups, Callback callback) throws PubnubException {
+        Hashtable args = new Hashtable(2);
+        String[] presenceChannelGroups = new String[groups.length];
+
+        for (int i = 0; i < groups.length; i++) {
+            presenceChannelGroups[i] = groups[i] + PRESENCE_SUFFIX;
+        }
+
+        args.put("groups", presenceChannelGroups);
         args.put("callback", callback);
 
         subscribe(args);
