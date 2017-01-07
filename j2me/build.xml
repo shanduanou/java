@@ -12,7 +12,7 @@
     <loadfile property="VERSION1" srcFile="../VERSION"><filterchain><striplinebreaks/></filterchain></loadfile>
 
     <condition property="isMaster">
-      <equals arg1="${git.branch}" arg2="master" />
+      <equals arg1="${git.branch}" arg2="master_3x" />
     </condition>
     <condition property="VERSION" value="${VERSION1}" else="${VERSION1}-${git.branch}-${git.revision}">
         <isset property="isMaster"/>
