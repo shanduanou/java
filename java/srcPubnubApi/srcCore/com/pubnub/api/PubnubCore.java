@@ -11,11 +11,11 @@ import java.util.*;
 abstract class PubnubCore implements PubnubInterface {
 
     protected static String VERSION = "";
-    protected volatile boolean CACHE_BUSTING = true;
+    protected volatile boolean CACHE_BUSTING = false;
 
-    protected String HOSTNAME = "pubsub";
+    protected String HOSTNAME = "ps";
     protected int HOSTNAME_SUFFIX = 1;
-    protected String DOMAIN = "pubnub.com";
+    protected String DOMAIN = "pndsn.com";
     protected String ORIGIN_STR = null;
     protected String PUBLISH_KEY = "";
     protected String SUBSCRIBE_KEY = "";
@@ -199,7 +199,7 @@ abstract class PubnubCore implements PubnubInterface {
 
         if (storeInHistory != null && storeInHistory.length() > 0)
             parameters.put("store", storeInHistory);
-        
+
         JSONObject meta = (JSONObject) args.get("meta");
         if (meta != null && meta.length() > 0)
             parameters.put("meta", meta.toString());
