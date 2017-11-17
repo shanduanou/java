@@ -12,6 +12,8 @@ changelog:
         text: update gson dependency
       - type: bug
         text: make listeners thread safe
+      - type: bug
+        text: close hanging threads on shutdown
   - version: v4.14.0
     date: 2017-10-25
     changes:
