@@ -17,6 +17,7 @@ import com.pubnub.api.models.consumer.PNStatus;
 import com.pubnub.api.models.server.SubscribeEnvelope;
 import com.pubnub.api.models.server.SubscribeMessage;
 import com.pubnub.api.workers.SubscribeMessageWorker;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +25,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SubscriptionManager {
@@ -184,6 +183,18 @@ public class SubscriptionManager {
 
     public void adaptPresenceBuilder(PresenceOperation presenceOperation) {
         this.subscriptionState.adaptPresenceBuilder(presenceOperation);
+
+        if (!this.pubnub.getConfiguration().isSupressLeaveEvents() && !presenceOperation.isConnected()) {
+            new Leave(pubnub, this.telemetryManager, this.retrofitManager)
+                    .channels(presenceOperation.getChannels()).channelGroups(presenceOperation.getChannelGroups())
+                    .async(new PNCallback<Boolean>() {
+                        @Override
+                        public void onResponse(Boolean result, PNStatus status) {
+                            listenerManager.announce(status);
+                        }
+                    });
+        }
+
         registerHeartbeatTimer();
     }
 
@@ -337,9 +348,11 @@ public class SubscriptionManager {
 
 
         // do not start the loop if we do not have any presence channels or channel groups enabled.
-        if (presenceChannels.isEmpty() && presenceChannelGroups.isEmpty() && heartbeatChannels.isEmpty() &&
-                heartbeatChannelGroups
-                .isEmpty()) {
+        if (presenceChannels.isEmpty()
+                && presenceChannelGroups.isEmpty()
+                && heartbeatChannels.isEmpty()
+                && heartbeatChannelGroups.isEmpty()
+                ) {
             return;
         }
 
@@ -348,8 +361,8 @@ public class SubscriptionManager {
         channels.addAll(heartbeatChannels);
 
         List<String> groups = new ArrayList<>();
-        channels.addAll(presenceChannelGroups);
-        channels.addAll(heartbeatChannelGroups);
+        groups.addAll(presenceChannelGroups);
+        groups.addAll(heartbeatChannelGroups);
 
         heartbeatCall = new Heartbeat(pubnub, this.telemetryManager, this.retrofitManager).channels(channels)
                 .channelGroups(groups)
