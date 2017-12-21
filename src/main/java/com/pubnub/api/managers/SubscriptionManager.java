@@ -17,7 +17,6 @@ import com.pubnub.api.models.consumer.PNStatus;
 import com.pubnub.api.models.server.SubscribeEnvelope;
 import com.pubnub.api.models.server.SubscribeMessage;
 import com.pubnub.api.workers.SubscribeMessageWorker;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +24,8 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class SubscriptionManager {
