@@ -407,6 +407,9 @@ features:
     - SUBSCRIBE-WILDCARD
     - SUBSCRIBE-FILTER-EXPRESSION
     - SUBSCRIBE-PUBLISHER-UUID
+    - SUBSCRIBE-SIGNAL-LISTENER
+  signal:
+    - SIGNAL-SEND
 supported-platforms:
   - version: PubNub Java SDK
     platforms:
