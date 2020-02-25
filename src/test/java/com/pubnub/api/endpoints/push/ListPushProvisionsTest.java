@@ -256,5 +256,4 @@ public class ListPushProvisionsTest extends TestHarness {
         Assert.assertEquals("apns", PNPushType.APNS.toString());
         Assert.assertEquals("apns2", PNPushType.APNS2.toString());
     }
-
 }

@@ -26,5 +26,4 @@ public enum PNPushType {
     public String toString() {
         return this.value;
     }
-
 }
