@@ -5,6 +5,8 @@ com.pubnub.api.callbacks
 com.pubnub.api.endpoints
 com.pubnub.api.endpoints.access
 com.pubnub.api.endpoints.channel_groups
+com.pubnub.api.endpoints.files
+com.pubnub.api.endpoints.files.requiredparambuilder
 com.pubnub.api.endpoints.message_actions
 com.pubnub.api.endpoints.objects_api.members
 com.pubnub.api.endpoints.objects_api.memberships
@@ -13,6 +15,7 @@ com.pubnub.api.endpoints.objects_api.users
 com.pubnub.api.endpoints.presence
 com.pubnub.api.endpoints.pubsub
 com.pubnub.api.endpoints.push
+com.pubnub.api.endpoints.remoteaction
 com.pubnub.api.endpoints.vendor
 com.pubnub.api.enums
 com.pubnub.api.interceptors
@@ -23,6 +26,7 @@ com.pubnub.api.models.consumer
 com.pubnub.api.models.consumer.access_manager
 com.pubnub.api.models.consumer.access_manager.v3
 com.pubnub.api.models.consumer.channel_group
+com.pubnub.api.models.consumer.files
 com.pubnub.api.models.consumer.history
 com.pubnub.api.models.consumer.message_actions
 com.pubnub.api.models.consumer.objects_api
@@ -33,6 +37,7 @@ com.pubnub.api.models.consumer.objects_api.user
 com.pubnub.api.models.consumer.objects_api.util
 com.pubnub.api.models.consumer.presence
 com.pubnub.api.models.consumer.pubsub
+com.pubnub.api.models.consumer.pubsub.files
 com.pubnub.api.models.consumer.pubsub.message_actions
 com.pubnub.api.models.consumer.pubsub.objects
 com.pubnub.api.models.consumer.push
@@ -40,6 +45,7 @@ com.pubnub.api.models.consumer.push.payload
 com.pubnub.api.models.server
 com.pubnub.api.models.server.access_manager
 com.pubnub.api.models.server.access_manager.v3
+com.pubnub.api.models.server.files
 com.pubnub.api.models.server.objects_api
 com.pubnub.api.models.server.presence
 com.pubnub.api.services
