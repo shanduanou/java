@@ -22,6 +22,7 @@ com.pubnub.api.endpoints.vendor
 com.pubnub.api.enums
 com.pubnub.api.interceptors
 com.pubnub.api.managers
+com.pubnub.api.managers.token_manager
 com.pubnub.api.models
 com.pubnub.api.models.consumer
 com.pubnub.api.models.consumer.access_manager
@@ -50,5 +51,6 @@ com.pubnub.api.models.server.files
 com.pubnub.api.models.server.objects_api
 com.pubnub.api.models.server.presence
 com.pubnub.api.services
+com.pubnub.api.utils
 com.pubnub.api.vendor
 com.pubnub.api.workers
