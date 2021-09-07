@@ -9,6 +9,7 @@ sdks:
       type: library
       full-name: Java SDK
       short-name: Java
+      tier: 1
       artifacts:
         -
           language: java
@@ -17,7 +18,6 @@ sdks:
             - Mobile
           source-repository: https://github.com/pubnub/java
           documentation: https://www.pubnub.com/docs/sdks/java/
-          tier: 1
           artifact-type: library
           distributions:
             -
