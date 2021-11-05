@@ -44,14 +44,14 @@ task cucumber() {
             main = "io.cucumber.core.cli.Main"
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
 
-            if (localProperties['cucumber.tags'] != null) {
-                args = ['--tags', localProperties['cucumberTags'],
+            if (localProperties['cucumberTags'] != null) {
+                args = ['--tags', localProperties.getProperty('cucumberTags'),
                         '--plugin', 'pretty',
                         '--plugin', 'json:build/reports/cucumber-reports/Cucumber.json',
                         '--plugin', 'junit:build/reports/cucumber-reports/Cucumber.xml',
                         '--plugin', 'html:build/reports/cucumber-reports/Cucumber.html',
                         '--glue', 'com.pubnub.contract',
-                        localProperties['featuresDir']]
+                        localProperties.getProperty('featuresDir')]
             } else {
                 args = ['--plugin', 'pretty',
                         '--plugin', 'json:build/reports/cucumber-reports/Cucumber.json',

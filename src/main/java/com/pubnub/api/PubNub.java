@@ -12,6 +12,7 @@ import com.pubnub.api.endpoints.MessageCounts;
 import com.pubnub.api.endpoints.Time;
 import com.pubnub.api.endpoints.access.Grant;
 import com.pubnub.api.endpoints.access.GrantToken;
+import com.pubnub.api.endpoints.access.RevokeToken;
 import com.pubnub.api.endpoints.channel_groups.AddChannelChannelGroup;
 import com.pubnub.api.endpoints.channel_groups.AllChannelsChannelGroup;
 import com.pubnub.api.endpoints.channel_groups.DeleteChannelGroup;
@@ -231,6 +232,11 @@ public class PubNub {
     @NotNull
     public GrantToken grantToken() {
         return new GrantToken(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
+    }
+
+    @NotNull
+    public RevokeToken revokeToken() {
+        return new RevokeToken(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
     @NotNull
