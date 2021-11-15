@@ -22,6 +22,6 @@ public interface AccessManagerService {
 
     @DELETE("/v3/pam/{subKey}/grant/{token}")
     Call<RevokeTokenResponse> revokeToken(@Path("subKey") String subKey,
-                                          @Path("token") String token,
+                                          @Path(value = "token", encoded = true) String token,
                                           @QueryMap Map<String, String> queryParams);
 }

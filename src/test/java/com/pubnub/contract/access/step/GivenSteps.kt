@@ -7,11 +7,14 @@ import com.pubnub.api.models.consumer.access_manager.v3.ChannelGrant
 import com.pubnub.api.models.consumer.access_manager.v3.ChannelGroupGrant
 import com.pubnub.api.models.consumer.access_manager.v3.PNGrantTokenResult
 import com.pubnub.api.models.consumer.access_manager.v3.UUIDGrant
+import com.pubnub.contract.state.World
 import io.cucumber.java.PendingException
 import io.cucumber.java.en.And
 import io.cucumber.java.en.Given
+import kotlin.random.Random
 
-class GivenSteps(private val grantTokenState: GrantTokenState) {
+class GivenSteps(private val grantTokenState: GrantTokenState,
+                 private val world: World) {
     private val tokenWithAll = "qEF2AkF0GmEI03xDdHRsGDxDcmVzpURjaGFuoWljaGFubmVsLTEY70NncnChb2NoYW5uZWxfZ3JvdXAtMQVDdXNyoENzcGOgRHV1aWShZnV1aWQtMRhoQ3BhdKVEY2hhbqFtXmNoYW5uZWwtXFMqJBjvQ2dycKF0XjpjaGFubmVsX2dyb3VwLVxTKiQFQ3VzcqBDc3BjoER1dWlkoWpedXVpZC1cUyokGGhEbWV0YaBEdXVpZHR0ZXN0LWF1dGhvcml6ZWQtdXVpZENzaWdYIPpU-vCe9rkpYs87YUrFNWkyNq8CVvmKwEjVinnDrJJc"
 
     @Given("I have a known token containing UUID pattern Permissions")
@@ -72,33 +75,82 @@ class GivenSteps(private val grantTokenState: GrantTokenState) {
         grant_permission(permissionType)
     }
 
+    //DELETE http://localhost:8090/v3/pam/sub-c-067a9e98-fb50-11eb-bc10-56aa1f324334/grant/A8TlaF6egF9dE6a0DzVpnEyftEt7Nl?pnsdk=PubNub-Kotlin%2F6.2.0&requestid=6cc73a57-d282-4685-bef1-7448895b8821&uuid=pn-6ecefeb0-4625-4dc2-b2da-ffea6c784678
+    //DELETE http://localhost:8090/v3/pam/sub-c-067a9e98-fb50-11eb-bc10-56aa1f324334/grant/A8TlaF6egF9dE6a0DzVpnEyftEt7Nl%2?pnsdk=PubNub-Java-Unified%2F5.2.2&requestid=38d10490-ae69-41a2-8f2c-ad20d9ffd65f&uuid=pn-35808916-ba0e-4cd0-adc0-7abaa87e4275
+    @Given("a token")
+    fun a_token() {
+        val characters: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9') + '_'
+        world.tokenString =
+                (1..30).map { Random.nextInt(0, characters.size) }.map { characters[it] }.joinToString("")
+        world.tokenString = "A8TlaF6egF9dE6a0DzVpnEyftEt7Nl"
+    }
+
+    @Given("a valid token with permissions to publish with channel {string}")
+    fun a_valid_token_with_permissions_to_publish_with_channel(string: String?) {
+        return a_token()
+    }
+
+    @Given("an expired token with permissions to publish with channel {string}")
+    fun an_expired_token_with_permissions_to_publish_with_channel(string: String) {
+        return a_token()
+    }
+
+    @Given("the token string {string}")
+    fun the_token_string(string: String) {
+        world.tokenString = string
+    }
+
     private fun grant_permission(permissionType: PermissionType) {
         when (permissionType) {
             PermissionType.READ -> when (val currentGrant = grantTokenState.currentGrant) {
-                is ChannelGrant -> { currentGrant.read() }
-                is ChannelGroupGrant -> { currentGrant.read() }
+                is ChannelGrant -> {
+                    currentGrant.read()
+                }
+                is ChannelGroupGrant -> {
+                    currentGrant.read()
+                }
             }
             PermissionType.WRITE -> when (val currentGrant = grantTokenState.currentGrant) {
-                is ChannelGrant -> { currentGrant.write() }
+                is ChannelGrant -> {
+                    currentGrant.write()
+                }
             }
             PermissionType.GET -> when (val currentGrant = grantTokenState.currentGrant) {
-                is ChannelGrant -> { currentGrant.get() }
-                is UUIDGrant -> { currentGrant.get() }
+                is ChannelGrant -> {
+                    currentGrant.get()
+                }
+                is UUIDGrant -> {
+                    currentGrant.get()
+                }
             }
             PermissionType.MANAGE -> when (val currentGrant = grantTokenState.currentGrant) {
-                is ChannelGrant -> { currentGrant.manage() }
-                is ChannelGroupGrant -> { currentGrant.manage() }
+                is ChannelGrant -> {
+                    currentGrant.manage()
+                }
+                is ChannelGroupGrant -> {
+                    currentGrant.manage()
+                }
             }
             PermissionType.UPDATE -> when (val currentGrant = grantTokenState.currentGrant) {
-                is ChannelGrant -> { currentGrant.update() }
-                is UUIDGrant -> { currentGrant.update() }
+                is ChannelGrant -> {
+                    currentGrant.update()
+                }
+                is UUIDGrant -> {
+                    currentGrant.update()
+                }
             }
             PermissionType.JOIN -> when (val currentGrant = grantTokenState.currentGrant) {
-                is ChannelGrant -> { currentGrant.join() }
+                is ChannelGrant -> {
+                    currentGrant.join()
+                }
             }
             PermissionType.DELETE -> when (val currentGrant = grantTokenState.currentGrant) {
-                is ChannelGrant -> { currentGrant.delete() }
-                is UUIDGrant -> { currentGrant.delete() }
+                is ChannelGrant -> {
+                    currentGrant.delete()
+                }
+                is UUIDGrant -> {
+                    currentGrant.delete()
+                }
             }
         }
     }

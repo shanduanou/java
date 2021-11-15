@@ -2,6 +2,7 @@ package com.pubnub.api.endpoints.access;
 
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
+import com.pubnub.api.PubNubUtil;
 import com.pubnub.api.builder.PubNubErrorBuilder;
 import com.pubnub.api.endpoints.Endpoint;
 import com.pubnub.api.enums.PNOperationType;
@@ -14,7 +15,11 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import retrofit2.Call;
 import retrofit2.Response;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +72,7 @@ public class RevokeToken extends Endpoint<RevokeTokenResponse, PNRevokeTokenResu
     protected Call<RevokeTokenResponse> doWork(Map<String, String> baseParams) throws PubNubException {
         return getRetrofit()
                 .getAccessManagerService()
-                .revokeToken(getPubnub().getConfiguration().getSubscribeKey(), token, baseParams);
+                .revokeToken(getPubnub().getConfiguration().getSubscribeKey(), repairEncoding(token), baseParams);
     }
 
     @Override
@@ -87,5 +92,20 @@ public class RevokeToken extends Endpoint<RevokeTokenResponse, PNRevokeTokenResu
     @Override
     protected boolean isAuthRequired() {
         return false;
+    }
+
+    private String repairEncoding(String token) {
+        String[] parts = token.split(" ");
+
+        List<String> encodedParts = new ArrayList<>(parts.length);
+
+        for (String part : parts) {
+            try {
+                encodedParts.add(URLEncoder.encode(part, "utf-8"));
+            } catch (UnsupportedEncodingException e) {
+                throw new NotImplementedException();
+            }
+        }
+        return PubNubUtil.joinString(encodedParts, "%20");
     }
 }
