@@ -15,7 +15,6 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import retrofit2.Call;
 import retrofit2.Response;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -65,7 +64,6 @@ public class RevokeToken extends Endpoint<RevokeTokenResponse, PNRevokeTokenResu
                     .pubnubError(PubNubErrorBuilder.PNERROBJ_TOKEN_MISSING)
                     .build();
         }
-
     }
 
     @Override
