@@ -94,7 +94,7 @@ public class RevokeToken extends Endpoint<RevokeTokenResponse, PNRevokeTokenResu
         return false;
     }
 
-    private String repairEncoding(String token) {
+    private String repairEncoding(String token) throws PubNubException {
         String[] parts = token.split(" ");
 
         List<String> encodedParts = new ArrayList<>(parts.length);
@@ -103,7 +103,10 @@ public class RevokeToken extends Endpoint<RevokeTokenResponse, PNRevokeTokenResu
             try {
                 encodedParts.add(URLEncoder.encode(part, "utf-8"));
             } catch (UnsupportedEncodingException e) {
-                throw new NotImplementedException();
+                throw PubNubException.builder()
+                        .pubnubError(PubNubErrorBuilder.PNERROBJ_PUBNUB_ERROR)
+                        .cause(e)
+                        .build();
             }
         }
         return PubNubUtil.joinString(encodedParts, "%20");
