@@ -4,7 +4,9 @@ import com.google.gson.JsonObject;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
 import com.pubnub.api.builder.PubNubErrorBuilder;
+import com.pubnub.api.callbacks.PNCallback;
 import com.pubnub.api.endpoints.Endpoint;
+import com.pubnub.api.endpoints.remoteaction.RemoteAction;
 import com.pubnub.api.enums.PNOperationType;
 import com.pubnub.api.managers.RetrofitManager;
 import com.pubnub.api.managers.TelemetryManager;
@@ -16,6 +18,7 @@ import com.pubnub.api.models.consumer.access_manager.v3.UUIDGrant;
 import com.pubnub.api.models.server.access_manager.v3.GrantTokenRequestBody;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -41,6 +44,76 @@ public class GrantToken extends Endpoint<JsonObject, PNGrantTokenResult> {
     private List<ChannelGroupGrant> channelGroups = Collections.emptyList();
     @Setter
     private List<UUIDGrant> uuids = Collections.emptyList();
+
+    public static class GrantTokenGeneralBuilder implements RemoteAction<PNGrantTokenResult> {
+
+        private final GrantToken grantToken;
+
+        public GrantTokenGeneralBuilder(GrantToken grantToken) {
+            this.grantToken = grantToken;
+        }
+
+        public GrantTokenGeneralBuilder ttl(Integer arg) {
+            grantToken.ttl(arg);
+            return this;
+        }
+
+        public GrantTokenGeneralBuilder meta(Object arg) {
+            grantToken.meta(arg);
+            return this;
+        }
+
+        public GrantTokenGeneralBuilder authorizedUUID(String arg) {
+            grantToken.authorizedUUID(arg);
+            return this;
+        }
+
+        public GrantTokenObjectsBuilder channels(List<ChannelGrant> arg) {
+            grantToken.channels(arg);
+            return new GrantTokenObjectsBuilder(grantToken);
+        }
+
+        public GrantTokenObjectsBuilder channelGroups(List<ChannelGroupGrant> arg) {
+            grantToken.channelGroups(arg);
+            return new GrantTokenObjectsBuilder(grantToken);
+        }
+
+        public GrantTokenObjectsBuilder uuids(List<UUIDGrant> arg) {
+            grantToken.uuids(arg);
+            return new GrantTokenObjectsBuilder(grantToken);
+        }
+
+        public GrantTokenVSPBuilder spaces(List<ChannelGroupGrant> arg) {
+            //grantToken.channels(arg); some translation here? Or maybe in GrantToken inside somewhere?
+            return new GrantTokenVSPBuilder(grantToken);
+        }
+
+        public GrantTokenVSPBuilder users(List<UUIDGrant> arg) {
+            //grantToken.uuids(arg); some translation here? Or maybe in GrantToken inside somewhere?
+            return new GrantTokenVSPBuilder(grantToken);
+        }
+
+        @Override
+        public PNGrantTokenResult sync() throws PubNubException {
+            return grantToken.sync();
+        }
+
+        @Override
+        public void async(@NotNull PNCallback<PNGrantTokenResult> callback) {
+            grantToken.async(callback);
+        }
+
+        @Override
+        public void retry() {
+            grantToken.retry();
+
+        }
+
+        @Override
+        public void silentCancel() {
+            grantToken.silentCancel();
+        }
+    }
 
     public GrantToken(PubNub pubnub,
                       TelemetryManager telemetryManager,

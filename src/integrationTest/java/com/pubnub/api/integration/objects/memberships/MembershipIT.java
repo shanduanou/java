@@ -1,6 +1,7 @@
 package com.pubnub.api.integration.objects.memberships;
 
 import com.pubnub.api.PubNubException;
+import com.pubnub.api.endpoints.objects_api.utils.PNSortKey;
 import com.pubnub.api.integration.objects.ObjectsApiBaseIT;
 import com.pubnub.api.models.consumer.objects_api.membership.PNChannelMembership;
 import com.pubnub.api.models.consumer.objects_api.membership.PNGetMembershipsResult;
@@ -97,6 +98,7 @@ public class MembershipIT extends ObjectsApiBaseIT {
                 .includeTotalCount(true)
                 .includeCustom(true)
                 .includeChannel(CHANNEL_WITH_CUSTOM)
+                .sort(PNSortKey.asc())
                 .sync();
 
         //then

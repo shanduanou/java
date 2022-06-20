@@ -2,6 +2,7 @@ package com.pubnub.api.endpoints.pubsub;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.github.tomakehurst.wiremock.verification.LoggedRequest;
+import com.google.gson.Gson;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
 import com.pubnub.api.callbacks.PNCallback;
@@ -247,6 +248,8 @@ public class PublishTest extends TestHarness {
         pubnub.getConfiguration().setCipherKey("testCipher");
 
         instance.channel("coolChannel").usePOST(true).message(Arrays.asList("m1", "m2")).sync();
+
+        Gson gson = new Gson();
 
         List<LoggedRequest> requests = findAll(postRequestedFor(urlMatching("/.*")));
         assertEquals(1, requests.size());
