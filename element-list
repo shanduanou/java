@@ -4,6 +4,7 @@ com.pubnub.api.builder.dto
 com.pubnub.api.callbacks
 com.pubnub.api.endpoints
 com.pubnub.api.endpoints.access
+com.pubnub.api.endpoints.access.builder
 com.pubnub.api.endpoints.channel_groups
 com.pubnub.api.endpoints.files
 com.pubnub.api.endpoints.files.requiredparambuilder
@@ -26,6 +27,7 @@ com.pubnub.api.managers.token_manager
 com.pubnub.api.models
 com.pubnub.api.models.consumer
 com.pubnub.api.models.consumer.access_manager
+com.pubnub.api.models.consumer.access_manager.sum
 com.pubnub.api.models.consumer.access_manager.v3
 com.pubnub.api.models.consumer.channel_group
 com.pubnub.api.models.consumer.files
