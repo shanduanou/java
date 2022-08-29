@@ -5,6 +5,7 @@ import com.pubnub.api.UserId;
 import com.pubnub.api.integration.objects.ObjectsApiBaseIT;
 import com.pubnub.api.integration.objects.uuid.UUIDMetadataIT;
 import com.pubnub.api.models.consumer.objects_vsp.user.CreateUserResult;
+import com.pubnub.api.models.consumer.objects_vsp.user.RemoveUserResult;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
@@ -29,7 +30,7 @@ public class UserIT extends ObjectsApiBaseIT {
     private final String randomExternalId = randomExternalId();
 
     @Test
-    public void createUserHappyPath4() throws PubNubException {
+    public void createUserHappyPath() throws PubNubException {
         //given
 
         //when
@@ -56,6 +57,32 @@ public class UserIT extends ObjectsApiBaseIT {
         assertNotNull(createUserResult.getData().getCustom());
         assertEquals(STATUS_ACTIVE, createUserResult.getData().getStatus());
         assertEquals(TYPE_HUMAN, createUserResult.getData().getType());
+    }
+
+    @Test
+    public void removeUserHappyPath() throws PubNubException {
+        final CreateUserResult createUserResult = pubNubUnderTest.createUser()
+                .userId(new UserId(randomUserId))
+                .name(randomName)
+                .email(randomEmail)
+                .profileUrl(randomProfileUrl)
+                .externalId(randomExternalId)
+                .custom(customUUIDObject())
+                .includeCustom(true)
+                .status(STATUS_ACTIVE)
+                .type(TYPE_HUMAN)
+                .sync();
+
+
+        RemoveUserResult removeUserResult = pubNubUnderTest.removeUser()
+                .userId(new UserId(randomUserId))
+                .sync();
+
+        //then
+        assertNotNull(removeUserResult);
+        assertEquals(HttpStatus.SC_OK, removeUserResult.getStatus());
+        //ToDo get user and check if not found. Waiting for get user
+
     }
 
     private String getRandomUserIdValue() {

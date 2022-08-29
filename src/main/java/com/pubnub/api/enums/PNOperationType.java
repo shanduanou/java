@@ -44,6 +44,7 @@ public enum PNOperationType {
 
     // User - VSP
     PNCreateUserOperation,
+    PNRemoveUserOperation,
 
     // Channel Metadata
     PNSetChannelMetadataOperation,

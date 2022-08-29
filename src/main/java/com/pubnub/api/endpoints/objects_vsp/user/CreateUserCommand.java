@@ -18,7 +18,7 @@ import retrofit2.Response;
 import java.util.HashMap;
 import java.util.Map;
 
-final public class CreateUserCommand extends CreateUser implements HavingCustomInclude<CreateUser> {
+public final class CreateUserCommand extends CreateUser implements HavingCustomInclude<CreateUser> {
     private String name;
     private String email;
     private String profileUrl;
