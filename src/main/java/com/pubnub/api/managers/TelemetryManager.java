@@ -183,6 +183,7 @@ public class TelemetryManager {
             case PNManageChannelMembersOperation:
             case PNCreateUserOperation:
             case PNRemoveUserOperation:
+            case PNFetchUserOperation:
                 endpoint = "obj";
                 break;
             case PNAccessManagerGrantToken:

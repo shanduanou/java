@@ -45,6 +45,7 @@ import com.pubnub.api.endpoints.objects_api.uuid.GetUUIDMetadata;
 import com.pubnub.api.endpoints.objects_api.uuid.RemoveUUIDMetadata;
 import com.pubnub.api.endpoints.objects_api.uuid.SetUUIDMetadata;
 import com.pubnub.api.endpoints.objects_vsp.user.CreateUser;
+import com.pubnub.api.endpoints.objects_vsp.user.FetchUser;
 import com.pubnub.api.endpoints.objects_vsp.user.RemoveUser;
 import com.pubnub.api.endpoints.presence.GetState;
 import com.pubnub.api.endpoints.presence.HereNow;
@@ -321,11 +322,22 @@ public class PubNub {
         return GetAllUUIDMetadata.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
+    /**
+     * @deprecated Use {@link #removeUser()} instead.
+     */
     @NotNull
     public GetUUIDMetadata getUUIDMetadata() {
         return GetUUIDMetadata.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
+    @NotNull
+    public FetchUser fetchUser() {
+        return FetchUser.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
+    }
+
+    /**
+     * @deprecated Use {@link #removeUser()} instead.
+     */
     @NotNull
     public RemoveUUIDMetadata removeUUIDMetadata() {
         return new RemoveUUIDMetadata(this, this.telemetryManager, this.retrofitManager, this.tokenManager);

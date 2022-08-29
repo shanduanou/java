@@ -5,6 +5,7 @@ import com.pubnub.api.UserId;
 import com.pubnub.api.integration.objects.ObjectsApiBaseIT;
 import com.pubnub.api.integration.objects.uuid.UUIDMetadataIT;
 import com.pubnub.api.models.consumer.objects_vsp.user.CreateUserResult;
+import com.pubnub.api.models.consumer.objects_vsp.user.FetchUserResult;
 import com.pubnub.api.models.consumer.objects_vsp.user.RemoveUserResult;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
@@ -49,6 +50,39 @@ public class UserIT extends ObjectsApiBaseIT {
         //then
         assertNotNull(createUserResult);
         assertEquals(HttpStatus.SC_OK, createUserResult.getStatus());
+//        assertEquals(randomUserId, createUserResult.getData().getId()); //no UserId in response for now. Asked Dara.
+        assertEquals(randomName, createUserResult.getData().getName());
+        assertEquals(randomEmail, createUserResult.getData().getEmail());
+        assertEquals(randomProfileUrl, createUserResult.getData().getProfileUrl());
+        assertEquals(randomExternalId, createUserResult.getData().getExternalId());
+        assertNotNull(createUserResult.getData().getCustom());
+        assertEquals(STATUS_ACTIVE, createUserResult.getData().getStatus());
+        assertEquals(TYPE_HUMAN, createUserResult.getData().getType());
+    }
+
+    @Test
+    public void fetchUserHappyPath() throws PubNubException {
+        //given
+        final CreateUserResult createUserResult = pubNubUnderTest.createUser()
+                .userId(new UserId(randomUserId))
+                .name(randomName)
+                .email(randomEmail)
+                .profileUrl(randomProfileUrl)
+                .externalId(randomExternalId)
+                .custom(customUUIDObject())
+                .includeCustom(true)
+                .status(STATUS_ACTIVE)
+                .type(TYPE_HUMAN)
+                .sync();
+
+        //when
+        FetchUserResult fetchUserResult = pubNubUnderTest.fetchUser()
+                .userId(new UserId(randomUserId))
+                .includeCustom(true)
+                .sync();
+
+        assertNotNull(fetchUserResult);
+        assertEquals(HttpStatus.SC_OK, fetchUserResult.getStatus());
 //        assertEquals(randomUserId, createUserResult.getData().getId()); //no UserId in response for now. Asked Dara.
         assertEquals(randomName, createUserResult.getData().getName());
         assertEquals(randomEmail, createUserResult.getData().getEmail());

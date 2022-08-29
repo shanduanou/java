@@ -15,6 +15,9 @@ public interface UserService {
     @Headers("Content-Type: application/json; charset=UTF-8")
     Call<EntityEnvelope<User>> createUser(@Path("subKey") String subKey, @Path("userId") String userId, @Body CreateUserPayload createUserPayload, @QueryMap(encoded = true) Map<String, String> options);
 
+    @GET("/v3/objects/{subKey}/users/{userId}")
+    Call<EntityEnvelope<User>> fetchUser(@Path("subKey") String subKey, @Path("userId") String userId, @QueryMap(encoded = true) Map<String, String> options);
+
     @DELETE("/v3/objects/{subKey}/users/{userId}")
     Call<EntityEnvelope<JsonElement>> removeUser(@Path("subKey") String subKey, @Path("userId") String userId, @QueryMap(encoded = true) Map<String, String> options);
 }

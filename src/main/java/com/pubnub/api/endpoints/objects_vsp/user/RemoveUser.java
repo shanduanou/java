@@ -17,7 +17,7 @@ import retrofit2.Response;
 import java.util.Collections;
 import java.util.Map;
 
-public class RemoveUser extends UserEndpoint<RemoveUser, EntityEnvelope<JsonElement>, RemoveUserResult> {  //dlaczego tu jest EntityEnvelope<JsonElement>
+public class RemoveUser extends UserEndpoint<RemoveUser, EntityEnvelope<JsonElement>, RemoveUserResult> {
 
     public RemoveUser(PubNub pubnubInstance,
                       TelemetryManager telemetry,
@@ -28,7 +28,9 @@ public class RemoveUser extends UserEndpoint<RemoveUser, EntityEnvelope<JsonElem
 
     @Override
     protected Call<EntityEnvelope<JsonElement>> executeCommand(Map<String, String> effectiveParams) throws PubNubException {
-        return getRetrofit().getUserService().removeUser(getPubnub().getConfiguration().getSubscribeKey(), effectiveUserId().getValue(), Collections.emptyMap());
+        return getRetrofit().
+                getUserService().
+                removeUser(getPubnub().getConfiguration().getSubscribeKey(), effectiveUserId().getValue(), Collections.emptyMap());
     }
 
     @Override

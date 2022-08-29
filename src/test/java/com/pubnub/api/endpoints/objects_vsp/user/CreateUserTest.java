@@ -38,7 +38,7 @@ public class CreateUserTest extends BaseObjectApiTest {
 
         when(retrofitManagerMock.getUserService()).thenReturn(userServiceMock);
         when(userServiceMock.createUser(eq(testSubscriptionKey), eq(testUserIdValue), any(), any())).thenReturn(call);
-        when(call.execute()).thenAnswer(invocationOnMock -> Response.success(new CreateUserResult()));
+        when(call.execute()).thenReturn(Response.success(new CreateUserResult()));
     }
 
     @Test
