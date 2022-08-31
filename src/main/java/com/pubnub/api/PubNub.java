@@ -47,6 +47,7 @@ import com.pubnub.api.endpoints.objects_api.uuid.SetUUIDMetadata;
 import com.pubnub.api.endpoints.objects_vsp.user.CreateUser;
 import com.pubnub.api.endpoints.objects_vsp.user.FetchUser;
 import com.pubnub.api.endpoints.objects_vsp.user.RemoveUser;
+import com.pubnub.api.endpoints.objects_vsp.user.UpdateUser;
 import com.pubnub.api.endpoints.presence.GetState;
 import com.pubnub.api.endpoints.presence.HereNow;
 import com.pubnub.api.endpoints.presence.SetState;
@@ -349,6 +350,10 @@ public class PubNub {
 
     public SetChannelMetadata.Builder setChannelMetadata() {
         return SetChannelMetadata.builder(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
+    }
+
+    public UpdateUser updateUser(){
+        return UpdateUser.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
     @NotNull

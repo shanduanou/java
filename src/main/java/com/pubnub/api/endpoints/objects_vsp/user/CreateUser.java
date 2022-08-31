@@ -24,8 +24,11 @@ public abstract class CreateUser extends UserEndpoint<CreateUser, EntityEnvelope
         super(pubNub, telemetry, retrofitInstance, compositeParameterEnricher, tokenManager);
     }
 
-
-    public static CreateUser create(final PubNub pubNub, final TelemetryManager telemetryManager, final RetrofitManager retrofitManager, final TokenManager tokenManager) {
+    public static CreateUser create(
+            final PubNub pubNub,
+            final TelemetryManager telemetryManager,
+            final RetrofitManager retrofitManager,
+            final TokenManager tokenManager) {
         final CompositeParameterEnricher compositeParameterEnricher = CompositeParameterEnricher.createDefault();
         return new CreateUserCommand(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
     }

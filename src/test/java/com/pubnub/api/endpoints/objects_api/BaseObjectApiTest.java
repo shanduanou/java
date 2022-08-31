@@ -21,6 +21,7 @@ import java.util.function.Supplier;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class BaseObjectApiTest {
@@ -48,7 +49,7 @@ public abstract class BaseObjectApiTest {
     public void configureMocks() throws PubNubException {
         when(configurationMock.getSubscribeKey()).thenReturn(testSubscriptionKey);
         when(configurationMock.getUuid()).thenReturn(testUUID);
-        when(configurationMock.getUserId()).thenReturn(new UserId(testUserIdValue));
+        lenient().when(configurationMock.getUserId()).thenReturn(new UserId(testUserIdValue));
         when(pubNubMock.getConfiguration()).thenReturn(configurationMock);
         when(pubNubMock.getVersion()).thenReturn(TEST_PUBNUB_VERSION);
     }
