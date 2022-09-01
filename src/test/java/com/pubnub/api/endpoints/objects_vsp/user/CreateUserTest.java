@@ -61,10 +61,10 @@ public class CreateUserTest extends BaseObjectApiTest {
         objectUnderTest.name(userName).sync();
 
         //then
-        ArgumentCaptor<CreateUserPayload> createUserPayloadArgumentCaptor = ArgumentCaptor.forClass(CreateUserPayload.class);
-        verify(userServiceMock, times(1)).createUser(eq(testSubscriptionKey), eq(testUserIdValue), createUserPayloadArgumentCaptor.capture(), any());
+        ArgumentCaptor<CreateUserPayload> createUserPayloadCaptor = ArgumentCaptor.forClass(CreateUserPayload.class);
+        verify(userServiceMock).createUser(eq(testSubscriptionKey), eq(testUserIdValue), createUserPayloadCaptor.capture(), any());
 
-        final CreateUserPayload capturedCreateUserPayload = createUserPayloadArgumentCaptor.getValue();
+        final CreateUserPayload capturedCreateUserPayload = createUserPayloadCaptor.getValue();
         assertEquals(userName, capturedCreateUserPayload.getName());
     }
 

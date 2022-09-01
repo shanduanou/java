@@ -4,8 +4,8 @@ import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class FetchUserResult extends UserResult {
-    public FetchUserResult(EntityEnvelope<User> entityEnvelope) {
+public class UpsertUserResult extends UserResult {
+    public UpsertUserResult(EntityEnvelope<User> entityEnvelope) {
         super(entityEnvelope);
     }
 }

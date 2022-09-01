@@ -40,6 +40,5 @@ public class FetchUserTest extends BaseObjectApiTest {
         objectUnderTest.userId(new UserId(testUserIdValue)).sync();
 
         verify(userServiceMock, times(1)).fetchUser(eq(testSubscriptionKey), eq(testUserIdValue), any());
-
     }
 }

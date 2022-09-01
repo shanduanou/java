@@ -7,15 +7,14 @@ import com.pubnub.api.endpoints.objects_vsp.UserEndpoint;
 import com.pubnub.api.managers.RetrofitManager;
 import com.pubnub.api.managers.TelemetryManager;
 import com.pubnub.api.managers.token_manager.TokenManager;
-import com.pubnub.api.models.consumer.objects_vsp.user.CreateUserResult;
+import com.pubnub.api.models.consumer.objects_vsp.user.UpsertUserResult;
 import com.pubnub.api.models.consumer.objects_vsp.user.User;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 
 import java.util.Map;
 
-public abstract class CreateUser extends UserEndpoint<CreateUser, EntityEnvelope<User>, CreateUserResult> implements CustomIncludeAware<CreateUser> {
-
-    CreateUser(
+public abstract class UpsertUser extends UserEndpoint<UpsertUser, EntityEnvelope<User>, UpsertUserResult> implements CustomIncludeAware<UpsertUser> {
+    UpsertUser(
             final PubNub pubNub,
             final TelemetryManager telemetry,
             final RetrofitManager retrofitInstance,
@@ -24,26 +23,26 @@ public abstract class CreateUser extends UserEndpoint<CreateUser, EntityEnvelope
         super(pubNub, telemetry, retrofitInstance, compositeParameterEnricher, tokenManager);
     }
 
-    public static CreateUser create(
+    public static UpsertUser create(
             final PubNub pubNub,
             final TelemetryManager telemetryManager,
             final RetrofitManager retrofitManager,
             final TokenManager tokenManager) {
         final CompositeParameterEnricher compositeParameterEnricher = CompositeParameterEnricher.createDefault();
-        return new CreateUserCommand(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
+        return new UpsertUserCommand(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
     }
 
-    public abstract CreateUser name(String name);
+    public abstract UpsertUser name(String name);
 
-    public abstract CreateUser email(String email);
+    public abstract UpsertUser email(String email);
 
-    public abstract CreateUser profileUrl(String profileUrl);
+    public abstract UpsertUser profileUrl(String profileUrl);
 
-    public abstract CreateUser externalId(String externalId);
+    public abstract UpsertUser externalId(String externalId);
 
-    public abstract CreateUser custom(Map<String, Object> custom);
+    public abstract UpsertUser custom(Map<String, Object> custom);
 
-    public abstract CreateUser status(String status);
+    public abstract UpsertUser status(String status);
 
-    public abstract CreateUser type(String type);
+    public abstract UpsertUser type(String type);
 }

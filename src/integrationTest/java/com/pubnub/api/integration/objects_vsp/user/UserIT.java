@@ -10,8 +10,10 @@ import com.pubnub.api.models.consumer.objects_vsp.user.CreateUserResult;
 import com.pubnub.api.models.consumer.objects_vsp.user.FetchUserResult;
 import com.pubnub.api.models.consumer.objects_vsp.user.RemoveUserResult;
 import com.pubnub.api.models.consumer.objects_vsp.user.UpdateUserResult;
+import com.pubnub.api.models.consumer.objects_vsp.user.UpsertUserResult;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
+import org.junit.After;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +54,7 @@ public class UserIT extends ObjectsApiBaseIT {
         //then
         assertNotNull(createUserResult);
         assertEquals(HttpStatus.SC_OK, createUserResult.getStatus());
-//        assertEquals(randomUserId, createUserResult.getData().getId()); //no UserId in response for now. Asked Dara.
+        assertEquals(randomUserId, createUserResult.getData().getId());
         assertEquals(randomName, createUserResult.getData().getName());
         assertEquals(randomEmail, createUserResult.getData().getEmail());
         assertEquals(randomProfileUrl, createUserResult.getData().getProfileUrl());
@@ -125,14 +127,11 @@ public class UserIT extends ObjectsApiBaseIT {
                 .userId(new UserId(randomUserId))
                 .includeCustom(true);
 
-        PubNubException exception = assertThrows(PubNubException.class, () -> {
-            fetchUser.sync();
-        });
+        PubNubException exception = assertThrows(PubNubException.class, () -> fetchUser.sync());
 
         assertTrue(exception.getMessage().contains("Requested resource not found"));
     }
 
-    //Currently it doesn't work because REST returns data="". API tester return in major cases data having values :|
     @Test
     public void updateUser_passing_full_object_happyPath() throws PubNubException {
         // given
@@ -217,8 +216,95 @@ public class UserIT extends ObjectsApiBaseIT {
         assertEquals(updatedName, updateUserResult.getData().getName());
     }
 
+    @Test
+    public void upsertUserHappyPath_newUserCreated() throws PubNubException {
+        //given
+
+        //when
+        UpsertUserResult upsertUserResult = pubNubUnderTest.upsertUser()
+                .userId(new UserId(randomUserId))
+                .name(randomName)
+                .email(randomEmail)
+                .profileUrl(randomProfileUrl)
+                .externalId(randomExternalId)
+                .custom(customUUIDObject())
+                .includeCustom(true)
+                .status(STATUS_ACTIVE)
+                .type(TYPE_HUMAN)
+                .sync();
+
+        //then
+        assertNotNull(upsertUserResult);
+        assertEquals(HttpStatus.SC_OK, upsertUserResult.getStatus());
+        assertEquals(randomUserId, upsertUserResult.getData().getId());
+        assertEquals(randomName, upsertUserResult.getData().getName());
+        assertEquals(randomEmail, upsertUserResult.getData().getEmail());
+        assertEquals(randomProfileUrl, upsertUserResult.getData().getProfileUrl());
+        assertEquals(randomExternalId, upsertUserResult.getData().getExternalId());
+        assertNotNull(upsertUserResult.getData().getCustom());
+        assertEquals(STATUS_ACTIVE, upsertUserResult.getData().getStatus());
+        assertEquals(TYPE_HUMAN, upsertUserResult.getData().getType());
+
+    }
+
+    @Test
+    public void upsertUserHappyPath_currentUserUpdated() throws PubNubException {
+        //given
+        String updatedName = "updatedName" + randomName();
+        String updatedEmail = "updatedEmail" + randomEmail();
+        String updatedProfileUrl = "updatedProfileUrl" + randomProfileUrl();
+        String updatedExternalId = "updatedExternalId" + randomExternalId();
+        Map<String, Object> updateCustom = updatedCustomUUIDObject();
+        String updatedStatus = "updatedStatus" + STATUS_ACTIVE;
+        String updatedType = "updatedType" + TYPE_HUMAN;
+
+        pubNubUnderTest.createUser()
+                .userId(new UserId(randomUserId))
+                .name(randomName)
+                .email(randomEmail)
+                .profileUrl(randomProfileUrl)
+                .externalId(randomExternalId)
+                .custom(customUUIDObject())
+                .includeCustom(true)
+                .status(STATUS_ACTIVE)
+                .type(TYPE_HUMAN)
+                .sync();
+
+        //when
+        UpsertUserResult upsertUserResult = pubNubUnderTest.upsertUser()
+                .userId(new UserId(randomUserId))
+                .name(updatedName)
+                .email(updatedEmail)
+                .profileUrl(updatedProfileUrl)
+                .externalId(updatedExternalId)
+                .custom(updateCustom)
+                .includeCustom(true)
+                .status(updatedStatus)
+                .type(updatedType)
+                .sync();
+
+        //then
+        assertNotNull(upsertUserResult);
+        assertEquals(HttpStatus.SC_OK, upsertUserResult.getStatus());
+        assertEquals(randomUserId, upsertUserResult.getData().getId());
+        assertEquals(updatedName, upsertUserResult.getData().getName());
+        assertEquals(updatedEmail, upsertUserResult.getData().getEmail());
+        assertEquals(updatedProfileUrl, upsertUserResult.getData().getProfileUrl());
+        assertEquals(updatedExternalId, upsertUserResult.getData().getExternalId());
+        assertEquals("\"val1_updated\"", ((JsonObject) upsertUserResult.getData().getCustom()).getAsJsonObject().get("user_param1").toString());
+        assertEquals("\"val2_updated\"", ((JsonObject) upsertUserResult.getData().getCustom()).getAsJsonObject().get("user_param2").toString());
+        assertEquals("\"added\"", ((JsonObject) upsertUserResult.getData().getCustom()).getAsJsonObject().get("user_param3").toString());
+        assertEquals(updatedStatus, upsertUserResult.getData().getStatus());
+        assertEquals(updatedType, upsertUserResult.getData().getType());
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        pubNubUnderTest.removeUser().userId(new UserId(randomUserId)).sync();
+    }
+
     private String getRandomUserIdValue() {
-        return "userId" + new Random().nextInt(1000);
+        return "userId" + new Random().nextInt(100000);
     }
 
     private static List<String> randomTestUUIDs() {

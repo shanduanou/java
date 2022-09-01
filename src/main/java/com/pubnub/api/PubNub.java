@@ -48,6 +48,7 @@ import com.pubnub.api.endpoints.objects_vsp.user.CreateUser;
 import com.pubnub.api.endpoints.objects_vsp.user.FetchUser;
 import com.pubnub.api.endpoints.objects_vsp.user.RemoveUser;
 import com.pubnub.api.endpoints.objects_vsp.user.UpdateUser;
+import com.pubnub.api.endpoints.objects_vsp.user.UpsertUser;
 import com.pubnub.api.endpoints.presence.GetState;
 import com.pubnub.api.endpoints.presence.HereNow;
 import com.pubnub.api.endpoints.presence.SetState;
@@ -346,14 +347,21 @@ public class PubNub {
 
     public RemoveUser removeUser() {
         return new RemoveUser(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
-    };
+    }
 
+    /**
+     * @deprecated Use {@link #updateUser()} or {@link #upsertUser()} instead.
+     */
     public SetChannelMetadata.Builder setChannelMetadata() {
         return SetChannelMetadata.builder(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
-    public UpdateUser updateUser(){
+    public UpdateUser updateUser() {
         return UpdateUser.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
+    }
+
+    public UpsertUser upsertUser() {
+        return UpsertUser.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
     @NotNull

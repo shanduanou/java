@@ -4,15 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-@Getter
-@ToString
-@AllArgsConstructor
-public class CreateUserPayload {
-    private final String name;
-    private final String email;
-    private final String externalId;
-    private final String profileUrl;
-    private final Object custom;
-    private final String status;
-    private final String type;
+
+public class CreateUserPayload extends UserPayload {
+    public CreateUserPayload(String name, String email, String externalId, String profileUrl, Object custom, String status, String type) {
+        super(name, email, externalId, profileUrl, custom, status, type);
+    }
 }

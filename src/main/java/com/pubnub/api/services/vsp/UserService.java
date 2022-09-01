@@ -5,6 +5,7 @@ import com.pubnub.api.models.consumer.objects_vsp.user.User;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 import com.pubnub.api.models.server.objects_vsp.CreateUserPayload;
 import com.pubnub.api.models.server.objects_vsp.UpdateUserPayload;
+import com.pubnub.api.models.server.objects_vsp.UpsertUserPayload;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -24,4 +25,7 @@ public interface UserService {
 
     @PATCH("/v3/objects/{subKey}/users/{userId}")
     Call<EntityEnvelope<User>> updateUser(@Path("subKey") String subKey, @Path("userId") String userId, @Body UpdateUserPayload updateUserPayload, @QueryMap(encoded = true) Map<String, String> options);
+
+    @PUT("/v3/objects/{subKey}/users/{userId}")
+    Call<EntityEnvelope<User>> upsertUser(@Path("subKey") String subKey, @Path("userId") String userId, @Body UpsertUserPayload upsertUserPayload, @QueryMap(encoded = true) Map<String, String> options);
 }

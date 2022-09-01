@@ -47,6 +47,7 @@ public enum PNOperationType {
     PNFetchUserOperation,
     PNRemoveUserOperation,
     PNUpdateUserOperation,
+    PNUpsertUserOperation,
 
     // Channel Metadata
     PNSetChannelMetadataOperation,
