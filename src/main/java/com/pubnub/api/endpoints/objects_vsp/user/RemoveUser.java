@@ -28,9 +28,9 @@ public class RemoveUser extends UserEndpoint<RemoveUser, EntityEnvelope<JsonElem
 
     @Override
     protected Call<EntityEnvelope<JsonElement>> executeCommand(Map<String, String> effectiveParams) throws PubNubException {
-        return getRetrofit().
-                getUserService().
-                removeUser(getPubnub().getConfiguration().getSubscribeKey(), effectiveUserId().getValue(), Collections.emptyMap());
+        return getRetrofit()
+                .getUserService()
+                .removeUser(getPubnub().getConfiguration().getSubscribeKey(), effectiveUserId().getValue(), Collections.emptyMap());
     }
 
     @Override

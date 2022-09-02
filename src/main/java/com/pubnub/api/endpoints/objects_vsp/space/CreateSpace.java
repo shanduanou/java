@@ -8,7 +8,7 @@ import com.pubnub.api.managers.RetrofitManager;
 import com.pubnub.api.managers.TelemetryManager;
 import com.pubnub.api.managers.token_manager.TokenManager;
 import com.pubnub.api.models.consumer.objects_vsp.space.Space;
-import com.pubnub.api.models.consumer.objects_vsp.user.CreateSpaceResult;
+import com.pubnub.api.models.consumer.objects_vsp.space.CreateSpaceResult;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 
 import java.util.Map;
@@ -41,6 +41,5 @@ public abstract class CreateSpace extends SpaceEndpoint<CreateSpace, EntityEnvel
     public abstract CreateSpace status(String status);
 
     public abstract CreateSpace type(String type);
-
 
 }

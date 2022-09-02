@@ -45,6 +45,7 @@ import com.pubnub.api.endpoints.objects_api.uuid.GetUUIDMetadata;
 import com.pubnub.api.endpoints.objects_api.uuid.RemoveUUIDMetadata;
 import com.pubnub.api.endpoints.objects_api.uuid.SetUUIDMetadata;
 import com.pubnub.api.endpoints.objects_vsp.space.CreateSpace;
+import com.pubnub.api.endpoints.objects_vsp.space.RemoveSpace;
 import com.pubnub.api.endpoints.objects_vsp.user.CreateUser;
 import com.pubnub.api.endpoints.objects_vsp.user.FetchUser;
 import com.pubnub.api.endpoints.objects_vsp.user.RemoveUser;
@@ -379,8 +380,15 @@ public class PubNub {
         return GetChannelMetadata.builder(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
+    /**
+     * @deprecated Use {@link #removeSpace()} instead.
+     */
     public RemoveChannelMetadata.Builder removeChannelMetadata() {
         return RemoveChannelMetadata.builder(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
+    }
+
+    public RemoveSpace removeSpace() {
+        return new RemoveSpace(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
     @NotNull

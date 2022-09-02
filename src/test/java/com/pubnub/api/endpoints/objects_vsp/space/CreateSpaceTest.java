@@ -5,7 +5,7 @@ import com.pubnub.api.SpaceId;
 import com.pubnub.api.endpoints.objects_api.BaseObjectApiTest;
 import com.pubnub.api.managers.token_manager.TokenManager;
 import com.pubnub.api.models.consumer.objects_vsp.space.Space;
-import com.pubnub.api.models.consumer.objects_vsp.user.CreateSpaceResult;
+import com.pubnub.api.models.consumer.objects_vsp.space.CreateSpaceResult;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 import com.pubnub.api.models.server.objects_vsp.space.CreateSpacePayload;
 import com.pubnub.api.services.vsp.SpaceService;

@@ -2,7 +2,11 @@ package com.pubnub.api.models.consumer.objects_vsp.user;
 
 import com.google.gson.JsonElement;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter(AccessLevel.PACKAGE)

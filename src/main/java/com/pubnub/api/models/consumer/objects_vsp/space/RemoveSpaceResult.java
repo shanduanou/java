@@ -1,6 +1,7 @@
-package com.pubnub.api.models.consumer.objects_vsp.user;
+package com.pubnub.api.models.consumer.objects_vsp.space;
 
-import com.pubnub.api.models.consumer.objects_vsp.space.Space;
+import com.google.gson.JsonElement;
+import com.pubnub.api.endpoints.objects_vsp.space.RemoveSpace;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,8 +13,8 @@ import lombok.ToString;
 @Setter(AccessLevel.PACKAGE)
 @NoArgsConstructor
 @ToString(callSuper = true)
-public class CreateSpaceResult extends EntityEnvelope<Space> {
-    public CreateSpaceResult(final EntityEnvelope<Space> entityEnvelope){
+public class RemoveSpaceResult extends EntityEnvelope<JsonElement> {
+    public RemoveSpaceResult(final EntityEnvelope<JsonElement> entityEnvelope){
         this.status = entityEnvelope.getStatus();
         this.data = entityEnvelope.getData();
     }
