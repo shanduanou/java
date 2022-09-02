@@ -3,14 +3,13 @@ package com.pubnub.api.endpoints.objects_vsp;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
 import com.pubnub.api.SpaceId;
-import com.pubnub.api.builder.PubNubErrorBuilder;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
 import com.pubnub.api.endpoints.objects_api.ObjectApiEndpoint;
 import com.pubnub.api.managers.RetrofitManager;
 import com.pubnub.api.managers.TelemetryManager;
 import com.pubnub.api.managers.token_manager.TokenManager;
 
-public abstract class SpaceEndpoint<SELF extends  SpaceEndpoint, INPUT, OUTPUT> extends ObjectApiEndpoint<INPUT, OUTPUT> {
+public abstract class SpaceEndpoint<SELF extends SpaceEndpoint, INPUT, OUTPUT> extends ObjectApiEndpoint<INPUT, OUTPUT> {
     protected SpaceId spaceId;
 
     protected SpaceEndpoint(
@@ -27,12 +26,12 @@ public abstract class SpaceEndpoint<SELF extends  SpaceEndpoint, INPUT, OUTPUT> 
         super.validateParams();
     }
 
-    public SELF spaceId(final SpaceId spaceId){
+    public SELF spaceId(final SpaceId spaceId) {
         this.spaceId = spaceId;
         return (SELF) this;
     }
 
-    protected SpaceId getSpaceId(){
+    protected SpaceId getSpaceId() {
         return spaceId;
     }
 }

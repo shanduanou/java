@@ -12,7 +12,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(callSuper = true)
 public class CreateSpaceResult extends EntityEnvelope<Space> {
-    public CreateSpaceResult(final EntityEnvelope<Space> entityEnvelope){
+    public CreateSpaceResult(final EntityEnvelope<Space> entityEnvelope) {
         this.status = entityEnvelope.getStatus();
         this.data = entityEnvelope.getData();
     }

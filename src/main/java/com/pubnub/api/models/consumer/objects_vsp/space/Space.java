@@ -18,13 +18,13 @@ public class Space extends PNObject {
     private String status;
     private String type;
 
-    public Space(String id, String name, String description){
+    public Space(String id, String name, String description) {
         super(id);
         this.name = name;
         this.description = description;
     }
 
-    public Space(String id, String name){
+    public Space(String id, String name) {
         this(id, name, null);
     }
 
