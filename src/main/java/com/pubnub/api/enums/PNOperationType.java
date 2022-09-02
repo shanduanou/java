@@ -49,6 +49,9 @@ public enum PNOperationType {
     PNUpdateUserOperation,
     PNUpsertUserOperation,
 
+    // Space - VSP
+    PNCreateSpaceOperation,
+
     // Channel Metadata
     PNSetChannelMetadataOperation,
     PNGetChannelMetadataOperation,

@@ -44,6 +44,7 @@ import com.pubnub.api.endpoints.objects_api.uuid.GetAllUUIDMetadata;
 import com.pubnub.api.endpoints.objects_api.uuid.GetUUIDMetadata;
 import com.pubnub.api.endpoints.objects_api.uuid.RemoveUUIDMetadata;
 import com.pubnub.api.endpoints.objects_api.uuid.SetUUIDMetadata;
+import com.pubnub.api.endpoints.objects_vsp.space.CreateSpace;
 import com.pubnub.api.endpoints.objects_vsp.user.CreateUser;
 import com.pubnub.api.endpoints.objects_vsp.user.FetchUser;
 import com.pubnub.api.endpoints.objects_vsp.user.RemoveUser;
@@ -309,7 +310,7 @@ public class PubNub {
     // Start Objects API
 
     /**
-     * @deprecated Use {@link #createUser()} instead.
+     * @deprecated Use {@link #createUser()} or {@link #updateUser()} or {@link #upsertUser()} instead.
      */
     public SetUUIDMetadata setUUIDMetadata() {
         return SetUUIDMetadata.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
@@ -317,6 +318,14 @@ public class PubNub {
 
     public CreateUser createUser() {
         return CreateUser.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
+    }
+
+    public UpdateUser updateUser() {
+        return UpdateUser.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
+    }
+
+    public UpsertUser upsertUser() {
+        return UpsertUser.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
     @NotNull
@@ -349,19 +358,15 @@ public class PubNub {
         return new RemoveUser(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
-    /**
-     * @deprecated Use {@link #updateUser()} or {@link #upsertUser()} instead.
-     */
+//    /**
+//     * @deprecated Use {@link #createSpace()} or {@link #updateSpace()} or {@link #upsertSpace()} instead.
+//     */
     public SetChannelMetadata.Builder setChannelMetadata() {
         return SetChannelMetadata.builder(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
-    public UpdateUser updateUser() {
-        return UpdateUser.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
-    }
-
-    public UpsertUser upsertUser() {
-        return UpsertUser.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
+    public CreateSpace createSpace() {
+        return CreateSpace.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
     @NotNull

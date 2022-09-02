@@ -7,7 +7,7 @@ import com.pubnub.api.managers.token_manager.TokenManager;
 import com.pubnub.api.models.consumer.objects_vsp.user.CreateUserResult;
 import com.pubnub.api.models.consumer.objects_vsp.user.User;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
-import com.pubnub.api.models.server.objects_vsp.CreateUserPayload;
+import com.pubnub.api.models.server.objects_vsp.user.CreateUserPayload;
 import com.pubnub.api.services.vsp.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;

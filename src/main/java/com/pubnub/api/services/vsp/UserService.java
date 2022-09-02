@@ -3,9 +3,9 @@ package com.pubnub.api.services.vsp;
 import com.google.gson.JsonElement;
 import com.pubnub.api.models.consumer.objects_vsp.user.User;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
-import com.pubnub.api.models.server.objects_vsp.CreateUserPayload;
-import com.pubnub.api.models.server.objects_vsp.UpdateUserPayload;
-import com.pubnub.api.models.server.objects_vsp.UpsertUserPayload;
+import com.pubnub.api.models.server.objects_vsp.user.CreateUserPayload;
+import com.pubnub.api.models.server.objects_vsp.user.UpdateUserPayload;
+import com.pubnub.api.models.server.objects_vsp.user.UpsertUserPayload;
 import retrofit2.Call;
 import retrofit2.http.*;
 

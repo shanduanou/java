@@ -2,17 +2,18 @@ package com.pubnub.api.endpoints.objects_vsp;
 
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
-import com.pubnub.api.UserId;
+import com.pubnub.api.SpaceId;
+import com.pubnub.api.builder.PubNubErrorBuilder;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
 import com.pubnub.api.endpoints.objects_api.ObjectApiEndpoint;
 import com.pubnub.api.managers.RetrofitManager;
 import com.pubnub.api.managers.TelemetryManager;
 import com.pubnub.api.managers.token_manager.TokenManager;
 
-public abstract class UserEndpoint<SELF extends UserEndpoint, INPUT, OUTPUT> extends ObjectApiEndpoint<INPUT, OUTPUT> {
-    private UserId userId;
+public abstract class SpaceEndpoint<SELF extends  SpaceEndpoint, INPUT, OUTPUT> extends ObjectApiEndpoint<INPUT, OUTPUT> {
+    protected SpaceId spaceId;
 
-    protected UserEndpoint(
+    protected SpaceEndpoint(
             final PubNub pubnubInstance,
             final TelemetryManager telemetry,
             final RetrofitManager retrofitInstance,
@@ -26,16 +27,12 @@ public abstract class UserEndpoint<SELF extends UserEndpoint, INPUT, OUTPUT> ext
         super.validateParams();
     }
 
-    public SELF userId(final UserId userId) {
-        this.userId = userId;
+    public SELF spaceId(final SpaceId spaceId){
+        this.spaceId = spaceId;
         return (SELF) this;
     }
 
-    protected UserId effectiveUserId() {
-        try {
-            return (userId != null) ? userId : getPubnub().getConfiguration().getUserId();
-        } catch (PubNubException e) {
-            throw new RuntimeException(e);
-        }
+    protected SpaceId getSpaceId(){
+        return spaceId;
     }
 }

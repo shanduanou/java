@@ -1,4 +1,4 @@
-package com.pubnub.api.models.server.objects_vsp;
+package com.pubnub.api.models.server.objects_vsp.space;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,11 +7,9 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public abstract class UserPayload {
+public class CreateSpacePayload {
     private final String name;
-    private final String email;
-    private final String externalId;
-    private final String profileUrl;
+    private final String description;
     private final Object custom;
     private final String status;
     private final String type;

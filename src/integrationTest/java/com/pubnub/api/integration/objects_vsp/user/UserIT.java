@@ -18,15 +18,21 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 public class UserIT extends ObjectsApiBaseIT {
     private static final Logger LOG = LoggerFactory.getLogger(UUIDMetadataIT.class);
     private static final int NUMBER_OF_RANDOM_TEST_UUIDS = 10;
-    public static final String STATUS_ACTIVE = "Active";
-    public static final String TYPE_HUMAN = "Human";
+
 
     private final String randomUserId = getRandomUserIdValue();
     private final String randomName = randomName();
@@ -45,7 +51,7 @@ public class UserIT extends ObjectsApiBaseIT {
                 .email(randomEmail)
                 .profileUrl(randomProfileUrl)
                 .externalId(randomExternalId)
-                .custom(customUUIDObject())
+                .custom(customUserObject())
                 .includeCustom(true)
                 .status(STATUS_ACTIVE)
                 .type(TYPE_HUMAN)
@@ -73,7 +79,7 @@ public class UserIT extends ObjectsApiBaseIT {
                 .email(randomEmail)
                 .profileUrl(randomProfileUrl)
                 .externalId(randomExternalId)
-                .custom(customUUIDObject())
+                .custom(customUserObject())
                 .includeCustom(true)
                 .status(STATUS_ACTIVE)
                 .type(TYPE_HUMAN)
@@ -107,7 +113,7 @@ public class UserIT extends ObjectsApiBaseIT {
                 .email(randomEmail)
                 .profileUrl(randomProfileUrl)
                 .externalId(randomExternalId)
-                .custom(customUUIDObject())
+                .custom(customUserObject())
                 .includeCustom(true)
                 .status(STATUS_ACTIVE)
                 .type(TYPE_HUMAN)
@@ -139,7 +145,7 @@ public class UserIT extends ObjectsApiBaseIT {
         String updatedEmail = "updatedEmail" + randomEmail();
         String updatedProfileUrl = "updatedProfileUrl" + randomProfileUrl();
         String updatedExternalId = "updatedExternalId" + randomExternalId();
-        Map<String, Object> updateCustom = updatedCustomUUIDObject();
+        Map<String, Object> updateCustom = updatedCustomUserObject();
         String updatedStatus = "updatedStatus" + STATUS_ACTIVE;
         String updatedType = "updatedType" + TYPE_HUMAN;
 
@@ -149,7 +155,7 @@ public class UserIT extends ObjectsApiBaseIT {
                 .email(randomEmail)
                 .profileUrl(randomProfileUrl)
                 .externalId(randomExternalId)
-                .custom(customUUIDObject())
+                .custom(customUserObject())
                 .includeCustom(true)
                 .status(STATUS_ACTIVE)
                 .type(TYPE_HUMAN)
@@ -227,7 +233,7 @@ public class UserIT extends ObjectsApiBaseIT {
                 .email(randomEmail)
                 .profileUrl(randomProfileUrl)
                 .externalId(randomExternalId)
-                .custom(customUUIDObject())
+                .custom(customUserObject())
                 .includeCustom(true)
                 .status(STATUS_ACTIVE)
                 .type(TYPE_HUMAN)
@@ -254,7 +260,7 @@ public class UserIT extends ObjectsApiBaseIT {
         String updatedEmail = "updatedEmail" + randomEmail();
         String updatedProfileUrl = "updatedProfileUrl" + randomProfileUrl();
         String updatedExternalId = "updatedExternalId" + randomExternalId();
-        Map<String, Object> updateCustom = updatedCustomUUIDObject();
+        Map<String, Object> updateCustom = updatedCustomUserObject();
         String updatedStatus = "updatedStatus" + STATUS_ACTIVE;
         String updatedType = "updatedType" + TYPE_HUMAN;
 
@@ -264,7 +270,7 @@ public class UserIT extends ObjectsApiBaseIT {
                 .email(randomEmail)
                 .profileUrl(randomProfileUrl)
                 .externalId(randomExternalId)
-                .custom(customUUIDObject())
+                .custom(customUserObject())
                 .includeCustom(true)
                 .status(STATUS_ACTIVE)
                 .type(TYPE_HUMAN)
@@ -323,31 +329,7 @@ public class UserIT extends ObjectsApiBaseIT {
         return RandomStringUtils.randomAlphabetic(6) + "@example.com";
     }
 
-    private String randomName() {
-        return RandomStringUtils.randomAlphabetic(5, 10) + " " + RandomStringUtils.randomAlphabetic(5, 10);
-    }
-
     private String randomProfileUrl() {
         return "http://" + RandomStringUtils.randomAlphabetic(5, 15) + ".com";
     }
-
-    private Map<String, Object> customUUIDObject() {
-        return new HashMap<String, Object>() {
-            {
-                putIfAbsent("user_param1", "val1");
-                putIfAbsent("user_param2", "val2");
-            }
-        };
-    }
-
-    private Map<String, Object> updatedCustomUUIDObject() {
-        return new HashMap<String, Object>() {
-            {
-                putIfAbsent("user_param1", "val1_updated");
-                putIfAbsent("user_param2", "val2_updated");
-                putIfAbsent("user_param3", "added");
-            }
-        };
-    }
-
 }

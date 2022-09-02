@@ -11,7 +11,7 @@ import com.pubnub.api.managers.token_manager.TokenManager;
 import com.pubnub.api.models.consumer.objects_vsp.user.UpdateUserResult;
 import com.pubnub.api.models.consumer.objects_vsp.user.User;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
-import com.pubnub.api.models.server.objects_vsp.UpdateUserPayload;
+import com.pubnub.api.models.server.objects_vsp.user.UpdateUserPayload;
 import retrofit2.Call;
 import retrofit2.Response;
 
