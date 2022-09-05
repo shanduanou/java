@@ -254,7 +254,7 @@ public class UserIT extends ObjectsApiBaseIT {
     }
 
     @Test
-    public void upsertUserHappyPath_currentUserUpdated() throws PubNubException {
+    public void upsertUserHappyPath_existingUserUpdated() throws PubNubException {
         //given
         String updatedName = "updatedName" + randomName();
         String updatedEmail = "updatedEmail" + randomEmail();

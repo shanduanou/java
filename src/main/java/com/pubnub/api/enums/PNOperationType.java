@@ -54,6 +54,7 @@ public enum PNOperationType {
     PNFetchSpaceOperation,
     PNRemoveSpaceOperation,
     PNUpdateSpaceOperation,
+    PNUpsertSpaceOperation,
 
     // Channel Metadata
     PNSetChannelMetadataOperation,

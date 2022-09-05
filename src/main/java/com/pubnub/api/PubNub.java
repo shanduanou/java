@@ -48,6 +48,7 @@ import com.pubnub.api.endpoints.objects_vsp.space.CreateSpace;
 import com.pubnub.api.endpoints.objects_vsp.space.FetchSpace;
 import com.pubnub.api.endpoints.objects_vsp.space.RemoveSpace;
 import com.pubnub.api.endpoints.objects_vsp.space.UpdateSpace;
+import com.pubnub.api.endpoints.objects_vsp.space.UpsertSpace;
 import com.pubnub.api.endpoints.objects_vsp.user.CreateUser;
 import com.pubnub.api.endpoints.objects_vsp.user.FetchUser;
 import com.pubnub.api.endpoints.objects_vsp.user.RemoveUser;
@@ -361,9 +362,9 @@ public class PubNub {
         return new RemoveUser(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
-//    /**
-//     * @deprecated Use {@link #createSpace()} or {@link #updateSpace()} or {@link #upsertSpace()} instead.
-//     */
+    /**
+     * @deprecated Use {@link #createSpace()} or {@link #updateSpace()} or {@link #upsertSpace()} instead.
+     */
     public SetChannelMetadata.Builder setChannelMetadata() {
         return SetChannelMetadata.builder(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
@@ -374,6 +375,10 @@ public class PubNub {
 
     public UpdateSpace updateSpace() {
         return UpdateSpace.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
+    }
+
+    public UpsertSpace upsertSpace() {
+        return UpsertSpace.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
     @NotNull
@@ -389,7 +394,7 @@ public class PubNub {
         return GetChannelMetadata.builder(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
-    public FetchSpace fetchSpace(){
+    public FetchSpace fetchSpace() {
         return FetchSpace.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 

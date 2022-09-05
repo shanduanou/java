@@ -5,9 +5,9 @@ import com.pubnub.api.SpaceId;
 import com.pubnub.api.endpoints.objects_api.BaseObjectApiTest;
 import com.pubnub.api.managers.token_manager.TokenManager;
 import com.pubnub.api.models.consumer.objects_vsp.space.Space;
-import com.pubnub.api.models.consumer.objects_vsp.space.UpdateSpaceResult;
+import com.pubnub.api.models.consumer.objects_vsp.space.UpsertSpaceResult;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
-import com.pubnub.api.models.server.objects_vsp.space.UpdateSpacePayload;
+import com.pubnub.api.models.server.objects_vsp.space.UpsertSpacePayload;
 import com.pubnub.api.services.vsp.SpaceService;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,8 +26,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class UpdateSpaceTest extends BaseObjectApiTest {
-    private UpdateSpace objectUnderTest;
+public class UpsertSpaceTest extends BaseObjectApiTest {
+    private UpsertSpace objectUnderTest;
 
     @Mock
     private SpaceService spaceServiceMock;
@@ -37,16 +37,15 @@ public class UpdateSpaceTest extends BaseObjectApiTest {
 
     @Before
     public void setUp() throws Exception {
-        objectUnderTest = UpdateSpace.create(pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
-
+        objectUnderTest = UpsertSpace.create(pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
 
         when(retrofitManagerMock.getSpaceService()).thenReturn(spaceServiceMock);
-        when(spaceServiceMock.updateSpace(eq(testSubscriptionKey), eq(testSpaceIdValue), any(), any())).thenReturn(call);
-        when(call.execute()).thenReturn(Response.success(new UpdateSpaceResult()));
+        when(spaceServiceMock.upsertSpace(eq(testSubscriptionKey), eq(testSpaceIdValue), any(), any())).thenReturn(call);
+        when(call.execute()).thenReturn(Response.success(new UpsertSpaceResult()));
     }
 
     @Test
-    public void can_updateSpace() throws PubNubException {
+    public void can_upsertSpace() throws PubNubException {
         //given
         String updatedName = "updatedName";
         String updatedDescription = "updatedDescription";
@@ -67,15 +66,14 @@ public class UpdateSpaceTest extends BaseObjectApiTest {
                 .sync();
 
         //then
-        ArgumentCaptor<UpdateSpacePayload> updateSpacePayloadCaptor = ArgumentCaptor.forClass(UpdateSpacePayload.class);
-        verify(spaceServiceMock, times(1)).updateSpace(eq(testSubscriptionKey), eq(testSpaceIdValue), updateSpacePayloadCaptor.capture(), any());
+        ArgumentCaptor<UpsertSpacePayload> upsertSpacePayloadCaptor = ArgumentCaptor.forClass(UpsertSpacePayload.class);
+        verify(spaceServiceMock, times(1)).upsertSpace(eq(testSubscriptionKey), eq(testSpaceIdValue), upsertSpacePayloadCaptor.capture(), any());
 
-        UpdateSpacePayload captorValue = updateSpacePayloadCaptor.getValue();
+        UpsertSpacePayload captorValue = upsertSpacePayloadCaptor.getValue();
         assertEquals(updatedName, captorValue.getName());
         assertEquals(updatedDescription, captorValue.getDescription());
         assertEquals(updatedCustom, captorValue.getCustom());
         assertEquals(updatedStatus, captorValue.getStatus());
         assertEquals(updatedType, captorValue.getType());
-
     }
 }
