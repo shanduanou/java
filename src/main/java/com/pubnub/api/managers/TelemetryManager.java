@@ -189,6 +189,7 @@ public class TelemetryManager {
             case PNCreateSpaceOperation:
             case PNRemoveSpaceOperation:
             case PNFetchSpaceOperation:
+            case PNUpdateSpaceOperation:
                 endpoint = "obj";
                 break;
             case PNAccessManagerGrantToken:

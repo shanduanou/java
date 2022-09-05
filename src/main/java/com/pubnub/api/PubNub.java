@@ -47,6 +47,7 @@ import com.pubnub.api.endpoints.objects_api.uuid.SetUUIDMetadata;
 import com.pubnub.api.endpoints.objects_vsp.space.CreateSpace;
 import com.pubnub.api.endpoints.objects_vsp.space.FetchSpace;
 import com.pubnub.api.endpoints.objects_vsp.space.RemoveSpace;
+import com.pubnub.api.endpoints.objects_vsp.space.UpdateSpace;
 import com.pubnub.api.endpoints.objects_vsp.user.CreateUser;
 import com.pubnub.api.endpoints.objects_vsp.user.FetchUser;
 import com.pubnub.api.endpoints.objects_vsp.user.RemoveUser;
@@ -369,6 +370,10 @@ public class PubNub {
 
     public CreateSpace createSpace() {
         return CreateSpace.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
+    }
+
+    public UpdateSpace updateSpace() {
+        return UpdateSpace.create(this, this.telemetryManager, this.retrofitManager, this.tokenManager);
     }
 
     @NotNull

@@ -182,9 +182,9 @@ public class UserIT extends ObjectsApiBaseIT {
         assertEquals(updatedEmail, updateUserResult.getData().getEmail());
         assertEquals(updatedProfileUrl, updateUserResult.getData().getProfileUrl());
         assertEquals(updatedExternalId, updateUserResult.getData().getExternalId());
-        assertEquals("\"val1_updated\"", ((JsonObject) updateUserResult.getData().getCustom()).getAsJsonObject().get("user_param1").toString());
-        assertEquals("\"val2_updated\"", ((JsonObject) updateUserResult.getData().getCustom()).getAsJsonObject().get("user_param2").toString());
-        assertEquals("\"added\"", ((JsonObject) updateUserResult.getData().getCustom()).getAsJsonObject().get("user_param3").toString());
+        assertEquals("\"val1_updated\"", ((JsonObject) updateUserResult.getData().getCustom()).getAsJsonObject().get("param1").toString());
+        assertEquals("\"val2_updated\"", ((JsonObject) updateUserResult.getData().getCustom()).getAsJsonObject().get("param2").toString());
+        assertEquals("\"added\"", ((JsonObject) updateUserResult.getData().getCustom()).getAsJsonObject().get("param3").toString());
         assertEquals(updatedStatus, updateUserResult.getData().getStatus());
         assertEquals(updatedType, updateUserResult.getData().getType());
 
@@ -206,7 +206,7 @@ public class UserIT extends ObjectsApiBaseIT {
     }
 
     @Test
-    public void updateUser_passing_only_field_to_be_updated_happyPath() throws PubNubException {
+    public void updateUser_creates_user_if_user_doesnot_exist() throws PubNubException {
         // given
         String updatedName = "updatedName" + randomName();
 
@@ -297,9 +297,9 @@ public class UserIT extends ObjectsApiBaseIT {
         assertEquals(updatedEmail, upsertUserResult.getData().getEmail());
         assertEquals(updatedProfileUrl, upsertUserResult.getData().getProfileUrl());
         assertEquals(updatedExternalId, upsertUserResult.getData().getExternalId());
-        assertEquals("\"val1_updated\"", ((JsonObject) upsertUserResult.getData().getCustom()).getAsJsonObject().get("user_param1").toString());
-        assertEquals("\"val2_updated\"", ((JsonObject) upsertUserResult.getData().getCustom()).getAsJsonObject().get("user_param2").toString());
-        assertEquals("\"added\"", ((JsonObject) upsertUserResult.getData().getCustom()).getAsJsonObject().get("user_param3").toString());
+        assertEquals("\"val1_updated\"", ((JsonObject) upsertUserResult.getData().getCustom()).getAsJsonObject().get("param1").toString());
+        assertEquals("\"val2_updated\"", ((JsonObject) upsertUserResult.getData().getCustom()).getAsJsonObject().get("param2").toString());
+        assertEquals("\"added\"", ((JsonObject) upsertUserResult.getData().getCustom()).getAsJsonObject().get("param3").toString());
         assertEquals(updatedStatus, upsertUserResult.getData().getStatus());
         assertEquals(updatedType, upsertUserResult.getData().getType());
     }

@@ -56,16 +56,24 @@ public abstract class ObjectsApiBaseIT {
 
     private Map<String, Object> getCustomObject(){
         final Map<String, Object> customMap = new HashMap<>();
-        customMap.putIfAbsent("user_param1", "val1");
-        customMap.putIfAbsent("user_param2", "val2");
+        customMap.putIfAbsent("param1", "val1");
+        customMap.putIfAbsent("param2", "val2");
         return customMap;
     }
 
     protected Map<String, Object> updatedCustomUserObject() {
+        return updatedCustomObject();
+    }
+
+    protected Map<String, Object> updatedCustomSpaceObject() {
+        return updatedCustomObject();
+    }
+
+    private Map<String, Object> updatedCustomObject() {
         final Map<String, Object> customMap = new HashMap<>();
-        customMap.putIfAbsent("user_param1", "val1_updated");
-        customMap.putIfAbsent("user_param2", "val2_updated");
-        customMap.putIfAbsent("user_param3", "added");
+        customMap.putIfAbsent("param1", "val1_updated");
+        customMap.putIfAbsent("param2", "val2_updated");
+        customMap.putIfAbsent("param3", "added");
         return customMap;
     }
 }
