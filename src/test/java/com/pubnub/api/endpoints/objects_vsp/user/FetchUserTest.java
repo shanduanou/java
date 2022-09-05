@@ -37,8 +37,12 @@ public class FetchUserTest extends BaseObjectApiTest {
 
     @Test
     public void can_fetch_user() throws PubNubException {
+        //given
+
+        //when
         objectUnderTest.userId(new UserId(testUserIdValue)).sync();
 
+        //then
         verify(userServiceMock, times(1)).fetchUser(eq(testSubscriptionKey), eq(testUserIdValue), any());
     }
 }

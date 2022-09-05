@@ -51,6 +51,7 @@ public enum PNOperationType {
 
     // Space - VSP
     PNCreateSpaceOperation,
+    PNFetchSpaceOperation,
     PNRemoveSpaceOperation,
 
     // Channel Metadata

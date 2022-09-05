@@ -4,6 +4,7 @@ import com.pubnub.api.PubNubException;
 import com.pubnub.api.SpaceId;
 import com.pubnub.api.integration.objects.ObjectsApiBaseIT;
 import com.pubnub.api.models.consumer.objects_vsp.space.CreateSpaceResult;
+import com.pubnub.api.models.consumer.objects_vsp.space.FetchSpaceResult;
 import com.pubnub.api.models.consumer.objects_vsp.space.RemoveSpaceResult;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
@@ -50,7 +51,7 @@ public class SpaceIT extends ObjectsApiBaseIT {
     @Test
     public void removeSpaceHappyPath() throws PubNubException {
         //given
-        CreateSpaceResult createSpaceResult = pubNubUnderTest.createSpace()
+        pubNubUnderTest.createSpace()
                 .spaceId(new SpaceId(randomSpaceId))
                 .name(randomName)
                 .description(randomDescription)
@@ -66,6 +67,36 @@ public class SpaceIT extends ObjectsApiBaseIT {
         //then
         assertEquals(HttpStatus.SC_OK, removeSpaceResult.getStatus());
 
+
+    }
+
+    @Test
+    public void getSpaceHappyPath() throws PubNubException {
+        //given
+        pubNubUnderTest.createSpace()
+                .spaceId(new SpaceId(randomSpaceId))
+                .name(randomName)
+                .description(randomDescription)
+                .custom(customSpaceObject())
+                .includeCustom(true)
+                .status(STATUS_ACTIVE)
+                .type(TYPE_HUMAN)
+                .sync();
+
+        //when
+        FetchSpaceResult fetchSpaceResult = pubNubUnderTest.fetchSpace()
+                .spaceId(new SpaceId(randomSpaceId))
+                .sync();
+
+        //then
+        assertNotNull(fetchSpaceResult);
+        assertEquals(HttpStatus.SC_OK, fetchSpaceResult.getStatus());
+        assertEquals(randomSpaceId, fetchSpaceResult.getData().getId());
+        assertEquals(randomName, fetchSpaceResult.getData().getName());
+        assertEquals(randomDescription, fetchSpaceResult.getData().getDescription());
+        assertNotNull(fetchSpaceResult.getData().getCustom());
+        assertEquals(STATUS_ACTIVE, fetchSpaceResult.getData().getStatus());
+        assertEquals(TYPE_HUMAN, fetchSpaceResult.getData().getType());
 
     }
 

@@ -29,6 +29,7 @@ public abstract class BaseObjectApiTest {
     protected final String testSubscriptionKey = UUID.randomUUID().toString();
     protected final String testUUID = UUID.randomUUID().toString();
     protected final String testUserIdValue = RandomStringUtils.randomAlphabetic(20);
+    protected final String testSpaceIdValue = RandomStringUtils.randomAlphabetic(20);
 
     @Mock
     private PNConfiguration configurationMock;

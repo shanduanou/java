@@ -28,7 +28,6 @@ import static org.mockito.Mockito.when;
 
 public class CreateSpaceTest extends BaseObjectApiTest {
     private CreateSpace objectUnderTest;
-    private final String testSpaceIdValue = RandomStringUtils.randomAlphabetic(20);
 
     @Mock
     private SpaceService spaceServiceMock;
