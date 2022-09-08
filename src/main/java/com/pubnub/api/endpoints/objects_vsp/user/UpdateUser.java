@@ -1,19 +1,19 @@
 package com.pubnub.api.endpoints.objects_vsp.user;
 
 import com.pubnub.api.PubNub;
+import com.pubnub.api.UserId;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
+import com.pubnub.api.endpoints.objects_api.ObjectApiEndpoint;
 import com.pubnub.api.endpoints.objects_api.utils.Include.CustomIncludeAware;
-import com.pubnub.api.endpoints.objects_vsp.UserEndpoint;
 import com.pubnub.api.managers.RetrofitManager;
 import com.pubnub.api.managers.TelemetryManager;
 import com.pubnub.api.managers.token_manager.TokenManager;
-import com.pubnub.api.models.consumer.objects_vsp.user.UpdateUserResult;
 import com.pubnub.api.models.consumer.objects_vsp.user.User;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 
 import java.util.Map;
 
-public abstract class UpdateUser extends UserEndpoint<UpdateUser, EntityEnvelope<User>, UpdateUserResult> implements CustomIncludeAware<UpdateUser> {
+public abstract class UpdateUser extends ObjectApiEndpoint<EntityEnvelope<User>, User> implements CustomIncludeAware<UpdateUser> {
     UpdateUser(
             final PubNub pubNub,
             final TelemetryManager telemetryManager,
@@ -24,12 +24,13 @@ public abstract class UpdateUser extends UserEndpoint<UpdateUser, EntityEnvelope
     }
 
     public static UpdateUser create(
+            final UserId userId,
             final PubNub pubNub,
             final TelemetryManager telemetryManager,
             final RetrofitManager retrofitManager,
             final TokenManager tokenManager) {
         final CompositeParameterEnricher compositeParameterEnricher = CompositeParameterEnricher.createDefault();
-        return new UpdateUserCommand(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
+        return new UpdateUserCommand(userId, pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
     }
 
     public abstract UpdateUser name(String name);

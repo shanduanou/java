@@ -5,7 +5,6 @@ import com.pubnub.api.SpaceId;
 import com.pubnub.api.endpoints.objects_api.BaseObjectApiTest;
 import com.pubnub.api.managers.token_manager.TokenManager;
 import com.pubnub.api.models.consumer.objects_vsp.space.Space;
-import com.pubnub.api.models.consumer.objects_vsp.space.CreateSpaceResult;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 import com.pubnub.api.models.server.objects_vsp.space.CreateSpacePayload;
 import com.pubnub.api.services.vsp.SpaceService;
@@ -37,11 +36,11 @@ public class CreateSpaceTest extends BaseObjectApiTest {
 
     @Before
     public void setUp() throws Exception {
-        objectUnderTest = CreateSpace.create(pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
+        objectUnderTest = CreateSpace.create(new SpaceId(testSpaceIdValue), pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
 
         when(retrofitManagerMock.getSpaceService()).thenReturn(spaceServiceMock);
         when(spaceServiceMock.createSpace(eq(testSubscriptionKey), eq(testSpaceIdValue), any(), any())).thenReturn(call);
-        when(call.execute()).thenReturn(Response.success(new CreateSpaceResult()));
+        when(call.execute()).thenReturn(Response.success(new EntityEnvelope<>()));
     }
 
     @Test
@@ -58,7 +57,6 @@ public class CreateSpaceTest extends BaseObjectApiTest {
 
         //when
         objectUnderTest
-                .spaceId(new SpaceId(testSpaceIdValue))
                 .name(spaceName)
                 .description(spaceDescription)
                 .custom(testCustom)

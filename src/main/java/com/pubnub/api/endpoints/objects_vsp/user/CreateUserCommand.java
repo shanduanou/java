@@ -2,38 +2,51 @@ package com.pubnub.api.endpoints.objects_vsp.user;
 
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
+import com.pubnub.api.UserId;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
 import com.pubnub.api.endpoints.objects_api.utils.Include.HavingCustomInclude;
 import com.pubnub.api.enums.PNOperationType;
 import com.pubnub.api.managers.RetrofitManager;
 import com.pubnub.api.managers.TelemetryManager;
 import com.pubnub.api.managers.token_manager.TokenManager;
-import com.pubnub.api.models.consumer.objects_vsp.user.CreateUserResult;
 import com.pubnub.api.models.consumer.objects_vsp.user.User;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 import com.pubnub.api.models.server.objects_vsp.user.CreateUserPayload;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import retrofit2.Call;
 import retrofit2.Response;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public final class CreateUserCommand extends CreateUser implements HavingCustomInclude<CreateUser> {
+@Accessors(chain = true, fluent = true)
+final class CreateUserCommand extends CreateUser implements HavingCustomInclude<CreateUser> {
+    private UserId userId;
+    @Setter
     private String name;
+    @Setter
     private String email;
+    @Setter
     private String profileUrl;
+    @Setter
     private String externalId;
+    @Setter
     private Map<String, Object> custom;
+    @Setter
     private String status;
+    @Setter
     private String type;
 
     public CreateUserCommand(
+            final UserId userId,
             final PubNub pubNub,
             final TelemetryManager telemetryManager,
             final RetrofitManager retrofitManager,
             final TokenManager tokenManager,
             final CompositeParameterEnricher compositeParameterEnricher) {
         super(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
+        this.userId = userId;
     }
 
     @Override
@@ -45,11 +58,10 @@ public final class CreateUserCommand extends CreateUser implements HavingCustomI
         }
 
         final CreateUserPayload createUserPayload = new CreateUserPayload(name, email, externalId, profileUrl, customHashMap, status, type);
-
         String subscribeKey = getPubnub().getConfiguration().getSubscribeKey();
         return getRetrofit()
                 .getUserService()
-                .createUser(subscribeKey, effectiveUserId().getValue(), createUserPayload, effectiveParams);
+                .createUser(subscribeKey, userId.getValue(), createUserPayload, effectiveParams);
     }
 
     @Override
@@ -57,55 +69,12 @@ public final class CreateUserCommand extends CreateUser implements HavingCustomI
         return super.getCompositeParameterEnricher();
     }
 
-
     @Override
-    public CreateUser name(String name) {
-        this.name = name;
-        return this;
-    }
-
-    @Override
-    public CreateUser email(String email) {
-        this.email = email;
-        return this;
-    }
-
-    @Override
-    public CreateUser profileUrl(String profileUrl) {
-        this.profileUrl = profileUrl;
-        return this;
-    }
-
-    @Override
-    public CreateUser externalId(String externalId) {
-        this.externalId = externalId;
-        return this;
-    }
-
-    @Override
-    public CreateUser custom(Map<String, Object> custom) {
-        this.custom = custom;
-        return this;
-    }
-
-    @Override
-    public CreateUser status(String status) {
-        this.status = status;
-        return this;
-    }
-
-    @Override
-    public CreateUser type(String type) {
-        this.type = type;
-        return this;
-    }
-
-    @Override
-    protected CreateUserResult createResponse(Response<EntityEnvelope<User>> input) throws PubNubException {
+    protected User createResponse(Response<EntityEnvelope<User>> input) throws PubNubException {
         if (input.body() != null) {
-            return new CreateUserResult(input.body());
+            return input.body().getData();
         } else {
-            return new CreateUserResult();
+            return new User();
         }
     }
 

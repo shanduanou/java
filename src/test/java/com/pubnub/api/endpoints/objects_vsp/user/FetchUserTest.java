@@ -4,7 +4,6 @@ import com.pubnub.api.PubNubException;
 import com.pubnub.api.UserId;
 import com.pubnub.api.endpoints.objects_api.BaseObjectApiTest;
 import com.pubnub.api.managers.token_manager.TokenManager;
-import com.pubnub.api.models.consumer.objects_vsp.user.FetchUserResult;
 import com.pubnub.api.models.consumer.objects_vsp.user.User;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 import com.pubnub.api.services.vsp.UserService;
@@ -29,10 +28,10 @@ public class FetchUserTest extends BaseObjectApiTest {
 
     @Before
     public void setUp() throws Exception {
-        objectUnderTest = FetchUser.create(pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
+        objectUnderTest = FetchUser.create(new UserId(testUserIdValue), pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
         when(retrofitManagerMock.getUserService()).thenReturn(userServiceMock);
         when(userServiceMock.fetchUser(eq(testSubscriptionKey), eq(testUserIdValue), any())).thenReturn(call);
-        when(call.execute()).thenReturn(Response.success(new FetchUserResult()));
+        when(call.execute()).thenReturn(Response.success(new EntityEnvelope<>()));
     }
 
     @Test
@@ -40,7 +39,7 @@ public class FetchUserTest extends BaseObjectApiTest {
         //given
 
         //when
-        objectUnderTest.userId(new UserId(testUserIdValue)).sync();
+        objectUnderTest.sync();
 
         //then
         verify(userServiceMock, times(1)).fetchUser(eq(testSubscriptionKey), eq(testUserIdValue), any());

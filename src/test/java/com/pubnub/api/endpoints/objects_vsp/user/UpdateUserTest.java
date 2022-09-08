@@ -4,7 +4,6 @@ import com.pubnub.api.PubNubException;
 import com.pubnub.api.UserId;
 import com.pubnub.api.endpoints.objects_api.BaseObjectApiTest;
 import com.pubnub.api.managers.token_manager.TokenManager;
-import com.pubnub.api.models.consumer.objects_vsp.user.UpdateUserResult;
 import com.pubnub.api.models.consumer.objects_vsp.user.User;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 import com.pubnub.api.models.server.objects_vsp.user.UpdateUserPayload;
@@ -35,10 +34,10 @@ public class UpdateUserTest extends BaseObjectApiTest {
 
     @Before
     public void setUp() throws Exception {
-        objectUnderTest = UpdateUser.create(pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
+        objectUnderTest = UpdateUser.create(new UserId(testUserIdValue), pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
         when(retrofitManagerMock.getUserService()).thenReturn(userServiceMock);
         when(userServiceMock.updateUser(eq(testSubscriptionKey), eq(testUserIdValue), any(), any())).thenReturn(call);
-        when(call.execute()).thenReturn(Response.success(new UpdateUserResult()));
+        when(call.execute()).thenReturn(Response.success(new EntityEnvelope<>()));
     }
 
     @Test
@@ -57,7 +56,6 @@ public class UpdateUserTest extends BaseObjectApiTest {
 
         //when
         objectUnderTest
-                .userId(new UserId(testUserIdValue))
                 .name(updatedName)
                 .email(updatedEmail)
                 .profileUrl(updatedProfileUrl)
@@ -90,7 +88,6 @@ public class UpdateUserTest extends BaseObjectApiTest {
 
         //when
         objectUnderTest
-                .userId(new UserId(testUserIdValue))
                 .name(updatedName)
                 .sync();
 
@@ -109,7 +106,6 @@ public class UpdateUserTest extends BaseObjectApiTest {
 
         //when
         objectUnderTest
-                .userId(new UserId(testUserIdValue))
                 .email(updatedEmail)
                 .sync();
 

@@ -22,7 +22,6 @@ import java.util.Map;
 public interface SpaceService {
 
     @POST("/v3/objects/{subKey}/spaces/{spaceId}")
-    @Headers("Content-Type: application/json; charset=UTF-8")
     Call<EntityEnvelope<Space>> createSpace(@Path("subKey") String subKey, @Path("spaceId") String spaceId, @Body CreateSpacePayload createSpacePayload, @QueryMap(encoded = true) Map<String, String> options);
 
     @GET("/v3/objects/{subKey}/spaces/{spaceId}")

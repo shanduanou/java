@@ -32,7 +32,7 @@ public class RemoveUserTest extends BaseObjectApiTest {
 
     @Before
     public void setUp() throws Exception {
-        objectUnderTest = new RemoveUser(pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
+        objectUnderTest = new RemoveUser(new UserId(testUserIdValue), pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
         when(retrofitManagerMock.getUserService()).thenReturn(userServiceMock);
         when(userServiceMock.removeUser(eq(testSubscriptionKey), eq(testUserIdValue), any())).thenReturn(call);
         when(call.execute()).thenReturn(Response.success(new RemoveUserResult()));
@@ -43,7 +43,7 @@ public class RemoveUserTest extends BaseObjectApiTest {
         //given
 
         //when
-        objectUnderTest.userId(new UserId(testUserIdValue)).sync();
+        objectUnderTest.sync();
 
         //then
         verify(userServiceMock, times(1)).removeUser(eq(testSubscriptionKey), eq(testUserIdValue), any());

@@ -33,7 +33,7 @@ public class RemoveSpaceTest extends BaseObjectApiTest {
 
     @Before
     public void setUp() throws Exception {
-        objectUnderTest = new RemoveSpace(pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
+        objectUnderTest = new RemoveSpace(new SpaceId(testSpaceIdValue), pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
         when(retrofitManagerMock.getSpaceService()).thenReturn(spaceServiceMock);
         when(spaceServiceMock.removeSpace(eq(testSubscriptionKey), eq(testSpaceIdValue), any())).thenReturn(call);
         when(call.execute()).thenReturn(Response.success(new RemoveSpaceResult()));
@@ -44,7 +44,7 @@ public class RemoveSpaceTest extends BaseObjectApiTest {
         //given
 
         //when
-        objectUnderTest.spaceId(new SpaceId(testSpaceIdValue)).sync();
+        objectUnderTest.sync();
 
         //then
         verify(spaceServiceMock).removeSpace(eq(testSubscriptionKey), eq(testSpaceIdValue), any());

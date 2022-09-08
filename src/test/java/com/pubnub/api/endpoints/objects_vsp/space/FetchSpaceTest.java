@@ -4,7 +4,6 @@ import com.pubnub.api.PubNubException;
 import com.pubnub.api.SpaceId;
 import com.pubnub.api.endpoints.objects_api.BaseObjectApiTest;
 import com.pubnub.api.managers.token_manager.TokenManager;
-import com.pubnub.api.models.consumer.objects_vsp.space.CreateSpaceResult;
 import com.pubnub.api.models.consumer.objects_vsp.space.Space;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 import com.pubnub.api.services.vsp.SpaceService;
@@ -31,10 +30,10 @@ public class FetchSpaceTest extends BaseObjectApiTest {
 
     @Before
     public void setUp() throws Exception {
-        objectUnderTest = FetchSpace.create(pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
+        objectUnderTest = FetchSpace.create(new SpaceId(testSpaceIdValue), pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
         when(retrofitManagerMock.getSpaceService()).thenReturn(spaceServiceMock);
         when(spaceServiceMock.fetchSpace(eq(testSubscriptionKey), eq(testSpaceIdValue), any())).thenReturn(call);
-        when(call.execute()).thenReturn(Response.success(new CreateSpaceResult()));
+        when(call.execute()).thenReturn(Response.success(new EntityEnvelope<>()));
     }
 
     @Test
@@ -42,9 +41,9 @@ public class FetchSpaceTest extends BaseObjectApiTest {
         //given
 
         //when
-        objectUnderTest.spaceId(new SpaceId(testSpaceIdValue)).sync();
+        objectUnderTest.sync();
 
         //then
-        verify(spaceServiceMock,times(1)).fetchSpace(eq(testSubscriptionKey), eq(testSpaceIdValue), any());
+        verify(spaceServiceMock, times(1)).fetchSpace(eq(testSubscriptionKey), eq(testSpaceIdValue), any());
     }
 }

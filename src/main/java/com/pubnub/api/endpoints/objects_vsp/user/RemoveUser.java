@@ -3,8 +3,9 @@ package com.pubnub.api.endpoints.objects_vsp.user;
 import com.google.gson.JsonElement;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
+import com.pubnub.api.UserId;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
-import com.pubnub.api.endpoints.objects_vsp.UserEndpoint;
+import com.pubnub.api.endpoints.objects_api.ObjectApiEndpoint;
 import com.pubnub.api.enums.PNOperationType;
 import com.pubnub.api.managers.RetrofitManager;
 import com.pubnub.api.managers.TelemetryManager;
@@ -17,20 +18,24 @@ import retrofit2.Response;
 import java.util.Collections;
 import java.util.Map;
 
-public class RemoveUser extends UserEndpoint<RemoveUser, EntityEnvelope<JsonElement>, RemoveUserResult> {
+public class RemoveUser extends ObjectApiEndpoint<EntityEnvelope<JsonElement>, RemoveUserResult> {
+    private UserId userId;
 
-    public RemoveUser(PubNub pubnubInstance,
-                      TelemetryManager telemetry,
-                      RetrofitManager retrofitInstance,
-                      TokenManager tokenManager) {
+    public RemoveUser(
+            final UserId userId,
+            final PubNub pubnubInstance,
+            final TelemetryManager telemetry,
+            final RetrofitManager retrofitInstance,
+            final TokenManager tokenManager) {
         super(pubnubInstance, telemetry, retrofitInstance, CompositeParameterEnricher.createDefault(), tokenManager);
+        this.userId = userId;
     }
 
     @Override
     protected Call<EntityEnvelope<JsonElement>> executeCommand(Map<String, String> effectiveParams) throws PubNubException {
         return getRetrofit()
                 .getUserService()
-                .removeUser(getPubnub().getConfiguration().getSubscribeKey(), effectiveUserId().getValue(), Collections.emptyMap());
+                .removeUser(getPubnub().getConfiguration().getSubscribeKey(), userId.getValue(), Collections.emptyMap());
     }
 
     @Override

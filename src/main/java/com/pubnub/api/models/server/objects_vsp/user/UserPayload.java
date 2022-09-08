@@ -1,12 +1,8 @@
 package com.pubnub.api.models.server.objects_vsp.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@ToString
-@AllArgsConstructor
+@Data
 public abstract class UserPayload {
     private final String name;
     private final String email;

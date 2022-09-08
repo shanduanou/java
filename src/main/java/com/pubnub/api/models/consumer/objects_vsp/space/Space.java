@@ -3,6 +3,7 @@ package com.pubnub.api.models.consumer.objects_vsp.space;
 import com.pubnub.api.models.consumer.objects_api.PNObject;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -12,6 +13,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@NoArgsConstructor
 public class Space extends PNObject {
     private String name;
     private String description;
