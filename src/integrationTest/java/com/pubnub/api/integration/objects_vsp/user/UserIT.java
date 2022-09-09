@@ -5,15 +5,13 @@ import com.pubnub.api.PubNubException;
 import com.pubnub.api.UserId;
 import com.pubnub.api.endpoints.objects_vsp.user.FetchUser;
 import com.pubnub.api.integration.objects.ObjectsApiBaseIT;
-import com.pubnub.api.integration.objects.uuid.UUIDMetadataIT;
 import com.pubnub.api.models.consumer.objects_vsp.user.RemoveUserResult;
 import com.pubnub.api.models.consumer.objects_vsp.user.User;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.HttpStatus;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Random;
@@ -25,22 +23,25 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 public class UserIT extends ObjectsApiBaseIT {
-    private static final Logger LOG = LoggerFactory.getLogger(UUIDMetadataIT.class);
-    private static final int NUMBER_OF_RANDOM_TEST_UUIDS = 10;
-
-
-    private final String randomUserId = getRandomUserIdValue();
+    private final String randomUserIdValue = getRandomUserIdValue();
+    private UserId randomUserId;
     private final String randomName = randomName();
     private final String randomEmail = randomEmail();
     private final String randomProfileUrl = randomProfileUrl();
     private final String randomExternalId = randomExternalId();
+
+    @Before
+    public void setUp() throws Exception {
+        randomUserId = new UserId(randomUserIdValue);
+    }
 
     @Test
     public void createUserHappyPath() throws PubNubException {
         //given
 
         //when
-        final User user = pubNubUnderTest.createUser(new UserId(randomUserId))
+        final User user = pubNubUnderTest.createUser()
+                .userId(randomUserId)
                 .name(randomName)
                 .email(randomEmail)
                 .profileUrl(randomProfileUrl)
@@ -53,7 +54,7 @@ public class UserIT extends ObjectsApiBaseIT {
 
         //then
         assertNotNull(user);
-        assertEquals(randomUserId, user.getId());
+        assertEquals(randomUserIdValue, user.getId());
         assertEquals(randomName, user.getName());
         assertEquals(randomEmail, user.getEmail());
         assertEquals(randomProfileUrl, user.getProfileUrl());
@@ -66,7 +67,8 @@ public class UserIT extends ObjectsApiBaseIT {
     @Test
     public void fetchUserHappyPath() throws PubNubException {
         //given
-        pubNubUnderTest.createUser(new UserId(randomUserId))
+        pubNubUnderTest.createUser()
+                .userId(randomUserId)
                 .name(randomName)
                 .email(randomEmail)
                 .profileUrl(randomProfileUrl)
@@ -78,12 +80,13 @@ public class UserIT extends ObjectsApiBaseIT {
                 .sync();
 
         //when
-        User user = pubNubUnderTest.fetchUser(new UserId(randomUserId))
+        User user = pubNubUnderTest.fetchUser()
+                .userId(randomUserId)
                 .includeCustom(true)
                 .sync();
 
         assertNotNull(user);
-        assertEquals(randomUserId, user.getId());
+        assertEquals(randomUserIdValue, user.getId());
         assertEquals(randomName, user.getName());
         assertEquals(randomEmail, user.getEmail());
         assertEquals(randomProfileUrl, user.getProfileUrl());
@@ -97,7 +100,8 @@ public class UserIT extends ObjectsApiBaseIT {
     @Test
     public void removeUserHappyPath() throws PubNubException {
         // given
-        pubNubUnderTest.createUser(new UserId(randomUserId))
+        pubNubUnderTest.createUser()
+                .userId(randomUserId)
                 .name(randomName)
                 .email(randomEmail)
                 .profileUrl(randomProfileUrl)
@@ -109,7 +113,8 @@ public class UserIT extends ObjectsApiBaseIT {
                 .sync();
 
         //when
-        RemoveUserResult removeUserResult = pubNubUnderTest.removeUser(new UserId(randomUserId))
+        RemoveUserResult removeUserResult = pubNubUnderTest.removeUser()
+                .userId(randomUserId)
                 .sync();
 
         //then
@@ -117,7 +122,8 @@ public class UserIT extends ObjectsApiBaseIT {
         assertEquals(HttpStatus.SC_OK, removeUserResult.getStatus());
 
         //verify if user not exist
-        FetchUser fetchUser = pubNubUnderTest.fetchUser(new UserId(randomUserId))
+        FetchUser fetchUser = pubNubUnderTest.fetchUser()
+                .userId(randomUserId)
                 .includeCustom(true);
 
         PubNubException exception = assertThrows(PubNubException.class, () -> fetchUser.sync());
@@ -136,7 +142,8 @@ public class UserIT extends ObjectsApiBaseIT {
         String updatedStatus = "updatedStatus" + STATUS_ACTIVE;
         String updatedType = "updatedType" + TYPE_HUMAN;
 
-        pubNubUnderTest.createUser(new UserId(randomUserId))
+        pubNubUnderTest.createUser()
+                .userId(randomUserId)
                 .name(randomName)
                 .email(randomEmail)
                 .profileUrl(randomProfileUrl)
@@ -148,7 +155,8 @@ public class UserIT extends ObjectsApiBaseIT {
                 .sync();
 
         // when
-        User userAfterUpdate = pubNubUnderTest.updateUser(new UserId(randomUserId))
+        User userAfterUpdate = pubNubUnderTest.updateUser()
+                .userId(randomUserId)
                 .name(updatedName)
                 .email(updatedEmail)
                 .profileUrl(updatedProfileUrl)
@@ -161,7 +169,7 @@ public class UserIT extends ObjectsApiBaseIT {
 
         // then
         assertNotNull(userAfterUpdate);
-        assertEquals(randomUserId, userAfterUpdate.getId());
+        assertEquals(randomUserIdValue, userAfterUpdate.getId());
         assertEquals(updatedName, userAfterUpdate.getName());
         assertEquals(updatedEmail, userAfterUpdate.getEmail());
         assertEquals(updatedProfileUrl, userAfterUpdate.getProfileUrl());
@@ -172,12 +180,13 @@ public class UserIT extends ObjectsApiBaseIT {
         assertEquals(updatedStatus, userAfterUpdate.getStatus());
         assertEquals(updatedType, userAfterUpdate.getType());
 
-        User user = pubNubUnderTest.fetchUser(new UserId(randomUserId))
+        User user = pubNubUnderTest.fetchUser()
+                .userId(randomUserId)
                 .includeCustom(true)
                 .sync();
 
         assertNotNull(user);
-        assertEquals(randomUserId, user.getId());
+        assertEquals(randomUserIdValue, user.getId());
         assertEquals(updatedName, user.getName());
         assertEquals(updatedEmail, user.getEmail());
         assertEquals(updatedProfileUrl, user.getProfileUrl());
@@ -193,12 +202,13 @@ public class UserIT extends ObjectsApiBaseIT {
         String updatedName = "updatedName" + randomName();
 
         // when
-        User user = pubNubUnderTest.updateUser(new UserId(randomUserId))
+        User user = pubNubUnderTest.updateUser()
+                .userId(randomUserId)
                 .name(updatedName)
                 .sync();
 
         //then
-        assertEquals(randomUserId, user.getId());
+        assertEquals(randomUserIdValue, user.getId());
         assertEquals(updatedName, user.getName());
     }
 
@@ -207,7 +217,8 @@ public class UserIT extends ObjectsApiBaseIT {
         //given
 
         //when
-        User user = pubNubUnderTest.upsertUser(new UserId(randomUserId))
+        User user = pubNubUnderTest.upsertUser()
+                .userId(randomUserId)
                 .name(randomName)
                 .email(randomEmail)
                 .profileUrl(randomProfileUrl)
@@ -220,7 +231,7 @@ public class UserIT extends ObjectsApiBaseIT {
 
         //then
         assertNotNull(user);
-        assertEquals(randomUserId, user.getId());
+        assertEquals(randomUserIdValue, user.getId());
         assertEquals(randomName, user.getName());
         assertEquals(randomEmail, user.getEmail());
         assertEquals(randomProfileUrl, user.getProfileUrl());
@@ -242,7 +253,8 @@ public class UserIT extends ObjectsApiBaseIT {
         String updatedStatus = "updatedStatus" + STATUS_ACTIVE;
         String updatedType = "updatedType" + TYPE_HUMAN;
 
-        pubNubUnderTest.createUser(new UserId(randomUserId))
+        pubNubUnderTest.createUser()
+                .userId(randomUserId)
                 .name(randomName)
                 .email(randomEmail)
                 .profileUrl(randomProfileUrl)
@@ -254,7 +266,8 @@ public class UserIT extends ObjectsApiBaseIT {
                 .sync();
 
         //when
-        User user = pubNubUnderTest.upsertUser(new UserId(randomUserId))
+        User user = pubNubUnderTest.upsertUser()
+                .userId(randomUserId)
                 .name(updatedName)
                 .email(updatedEmail)
                 .profileUrl(updatedProfileUrl)
@@ -267,7 +280,7 @@ public class UserIT extends ObjectsApiBaseIT {
 
         //then
         assertNotNull(user);
-        assertEquals(randomUserId, user.getId());
+        assertEquals(randomUserIdValue, user.getId());
         assertEquals(updatedName, user.getName());
         assertEquals(updatedEmail, user.getEmail());
         assertEquals(updatedProfileUrl, user.getProfileUrl());
@@ -281,7 +294,9 @@ public class UserIT extends ObjectsApiBaseIT {
 
     @After
     public void tearDown() throws Exception {
-        pubNubUnderTest.removeUser(new UserId(randomUserId)).sync();
+        pubNubUnderTest.removeUser()
+                .userId(randomUserId)
+                .sync();
     }
 
     private String getRandomUserIdValue() {

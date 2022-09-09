@@ -35,7 +35,7 @@ final class CreateSpaceCommand extends CreateSpace implements HavingCustomInclud
     private String type;
 
 
-    public CreateSpaceCommand(
+    CreateSpaceCommand(
             final SpaceId spaceId,
             final PubNub pubNub,
             final TelemetryManager telemetryManager,

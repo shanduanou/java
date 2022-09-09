@@ -34,7 +34,7 @@ final class UpsertSpaceCommand extends UpsertSpace implements HavingCustomInclud
     @Setter
     private String type;
 
-    public UpsertSpaceCommand(
+    UpsertSpaceCommand(
             final SpaceId spaceId,
             final PubNub pubNub,
             final TelemetryManager telemetryManager,

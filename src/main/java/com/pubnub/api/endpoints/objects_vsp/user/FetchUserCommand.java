@@ -17,24 +17,21 @@ import retrofit2.Response;
 import java.util.Map;
 
 final class FetchUserCommand extends FetchUser implements HavingCustomInclude<FetchUser> {
-    private UserId userId;
 
-    public FetchUserCommand(
-            final UserId userId,
+    FetchUserCommand(
             final PubNub pubNub,
             final TelemetryManager telemetryManager,
             final RetrofitManager retrofitManager,
             final TokenManager tokenManager,
             final CompositeParameterEnricher compositeParameterEnricher) {
         super(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
-        this.userId = userId;
     }
 
     @Override
     protected Call<EntityEnvelope<User>> executeCommand(Map<String, String> effectiveParams) throws PubNubException {
         return getRetrofit()
                 .getUserService()
-                .fetchUser(getPubnub().getConfiguration().getSubscribeKey(), userId.getValue(), effectiveParams);
+                .fetchUser(getPubnub().getConfiguration().getSubscribeKey(), effectiveUserId().getValue(), effectiveParams);
     }
 
     @Override

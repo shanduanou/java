@@ -34,7 +34,7 @@ final class UpdateSpaceCommand extends UpdateSpace implements HavingCustomInclud
     @Setter
     private String type;
 
-    public UpdateSpaceCommand(
+    UpdateSpaceCommand(
             final SpaceId spaceId,
             final PubNub pubNub,
             final TelemetryManager telemetryManager,

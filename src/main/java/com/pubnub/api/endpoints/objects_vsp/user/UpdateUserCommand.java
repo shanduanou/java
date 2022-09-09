@@ -21,8 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Accessors(chain = true, fluent = true)
-public class UpdateUserCommand extends UpdateUser implements HavingCustomInclude<UpdateUser> {
-    private UserId userId;
+class UpdateUserCommand extends UpdateUser implements HavingCustomInclude<UpdateUser> {
     @Setter
     private String name;
     @Setter
@@ -38,15 +37,13 @@ public class UpdateUserCommand extends UpdateUser implements HavingCustomInclude
     @Setter
     private String type;
 
-    public UpdateUserCommand(
-            final UserId userId,
+    UpdateUserCommand(
             final PubNub pubNub,
             final TelemetryManager telemetryManager,
             final RetrofitManager retrofitManager,
             final TokenManager tokenManager,
             final CompositeParameterEnricher compositeParameterEnricher) {
         super(pubNub, telemetryManager, retrofitManager, compositeParameterEnricher, tokenManager);
-        this.userId = userId;
     }
 
     @Override
@@ -62,7 +59,7 @@ public class UpdateUserCommand extends UpdateUser implements HavingCustomInclude
         String subscribeKey = getPubnub().getConfiguration().getSubscribeKey();
         return getRetrofit()
                 .getUserService()
-                .updateUser(subscribeKey, userId.getValue(), updateUserPayload, effectiveParams);
+                .updateUser(subscribeKey, effectiveUserId().getValue(), updateUserPayload, effectiveParams);
     }
 
     @Override

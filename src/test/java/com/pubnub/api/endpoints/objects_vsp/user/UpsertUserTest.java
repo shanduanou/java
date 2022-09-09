@@ -34,7 +34,7 @@ public class UpsertUserTest extends BaseObjectApiTest {
 
     @Before
     public void setUp() throws Exception {
-        objectUnderTest = UpsertUser.create(new UserId(testUserIdValue), pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
+        objectUnderTest = UpsertUser.create(pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
 
         when(retrofitManagerMock.getUserService()).thenReturn(userServiceMock);
         when(userServiceMock.upsertUser(eq(testSubscriptionKey), eq(testUserIdValue), any(), any())).thenReturn(call);
@@ -54,6 +54,7 @@ public class UpsertUserTest extends BaseObjectApiTest {
         String updatedType = "updatedType";
 
         objectUnderTest
+                .userId(new UserId(testUserIdValue))
                 .name(updatedName)
                 .email(updatedEmail)
                 .profileUrl(updatedProfileUrl)

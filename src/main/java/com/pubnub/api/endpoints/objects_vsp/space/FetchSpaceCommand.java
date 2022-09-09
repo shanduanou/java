@@ -19,7 +19,7 @@ import java.util.Map;
 final class FetchSpaceCommand extends FetchSpace implements HavingCustomInclude<FetchSpace> {
     private SpaceId spaceId;
 
-    public FetchSpaceCommand(
+    FetchSpaceCommand(
             final SpaceId spaceId,
             final PubNub pubNub,
             final TelemetryManager telemetryManager,

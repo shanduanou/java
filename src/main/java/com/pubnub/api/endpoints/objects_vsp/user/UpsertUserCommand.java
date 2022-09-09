@@ -21,8 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Accessors(chain = true, fluent = true)
-public class UpsertUserCommand extends UpsertUser implements HavingCustomInclude<UpsertUser> {
-    private UserId userId;
+class UpsertUserCommand extends UpsertUser implements HavingCustomInclude<UpsertUser> {
     @Setter
     private String name;
     @Setter
@@ -38,15 +37,13 @@ public class UpsertUserCommand extends UpsertUser implements HavingCustomInclude
     @Setter
     private String type;
 
-    public UpsertUserCommand(
-            final UserId userId,
+    UpsertUserCommand(
             final PubNub pubNub,
             final TelemetryManager telemetryManager,
             final RetrofitManager retrofitManager,
             final TokenManager tokenManager,
             final CompositeParameterEnricher compositeParameterEnricher) {
         super(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
-        this.userId = userId;
     }
 
     @Override
@@ -59,7 +56,7 @@ public class UpsertUserCommand extends UpsertUser implements HavingCustomInclude
         final UpsertUserPayload upsertUserPayload = new UpsertUserPayload(name, email, externalId, profileUrl, customHashMap, status, type);
 
         String subscribeKey = getPubnub().getConfiguration().getSubscribeKey();
-        return getRetrofit().getUserService().upsertUser(subscribeKey, userId.getValue(), upsertUserPayload, effectiveParams);
+        return getRetrofit().getUserService().upsertUser(subscribeKey, effectiveUserId().getValue(), upsertUserPayload, effectiveParams);
     }
 
     @Override

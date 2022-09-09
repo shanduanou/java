@@ -28,7 +28,7 @@ public class FetchUserTest extends BaseObjectApiTest {
 
     @Before
     public void setUp() throws Exception {
-        objectUnderTest = FetchUser.create(new UserId(testUserIdValue), pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
+        objectUnderTest = FetchUser.create(pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
         when(retrofitManagerMock.getUserService()).thenReturn(userServiceMock);
         when(userServiceMock.fetchUser(eq(testSubscriptionKey), eq(testUserIdValue), any())).thenReturn(call);
         when(call.execute()).thenReturn(Response.success(new EntityEnvelope<>()));
@@ -39,7 +39,7 @@ public class FetchUserTest extends BaseObjectApiTest {
         //given
 
         //when
-        objectUnderTest.sync();
+        objectUnderTest.userId(new UserId(testUserIdValue)).sync();
 
         //then
         verify(userServiceMock, times(1)).fetchUser(eq(testSubscriptionKey), eq(testUserIdValue), any());

@@ -33,7 +33,7 @@ public class CreateUserTest extends BaseObjectApiTest {
 
     @Before
     public void setUp() throws IOException, PubNubException {
-        objectUnderTest = CreateUser.create(new UserId(testUserIdValue),pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
+        objectUnderTest = CreateUser.create(pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
 
         when(retrofitManagerMock.getUserService()).thenReturn(userServiceMock);
         when(userServiceMock.createUser(eq(testSubscriptionKey), eq(testUserIdValue), any(), any())).thenReturn(call);
@@ -45,7 +45,7 @@ public class CreateUserTest extends BaseObjectApiTest {
         //given
 
         //when
-        objectUnderTest.sync();
+        objectUnderTest.userId(new UserId(testUserIdValue)).sync();
 
         //then
         verify(userServiceMock, times(1)).createUser(eq(testSubscriptionKey), eq(testUserIdValue), any(), any());

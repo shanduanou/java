@@ -22,7 +22,6 @@ import java.util.Map;
 
 @Accessors(chain = true, fluent = true)
 final class CreateUserCommand extends CreateUser implements HavingCustomInclude<CreateUser> {
-    private UserId userId;
     @Setter
     private String name;
     @Setter
@@ -38,15 +37,13 @@ final class CreateUserCommand extends CreateUser implements HavingCustomInclude<
     @Setter
     private String type;
 
-    public CreateUserCommand(
-            final UserId userId,
+    CreateUserCommand(
             final PubNub pubNub,
             final TelemetryManager telemetryManager,
             final RetrofitManager retrofitManager,
             final TokenManager tokenManager,
             final CompositeParameterEnricher compositeParameterEnricher) {
         super(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
-        this.userId = userId;
     }
 
     @Override
@@ -61,7 +58,7 @@ final class CreateUserCommand extends CreateUser implements HavingCustomInclude<
         String subscribeKey = getPubnub().getConfiguration().getSubscribeKey();
         return getRetrofit()
                 .getUserService()
-                .createUser(subscribeKey, userId.getValue(), createUserPayload, effectiveParams);
+                .createUser(subscribeKey, effectiveUserId().getValue(), createUserPayload, effectiveParams);
     }
 
     @Override
