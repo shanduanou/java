@@ -239,7 +239,6 @@ public class UserIT extends ObjectsApiBaseIT {
         assertNotNull(user.getCustom());
         assertEquals(STATUS_ACTIVE, user.getStatus());
         assertEquals(TYPE_HUMAN, user.getType());
-
     }
 
     @Test
