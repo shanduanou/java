@@ -1,6 +1,5 @@
 package com.pubnub.api.integration.objects_vsp.user;
 
-import com.google.gson.JsonObject;
 import com.pubnub.api.PubNubException;
 import com.pubnub.api.UserId;
 import com.pubnub.api.endpoints.objects_vsp.user.FetchUser;
@@ -54,7 +53,7 @@ public class UserIT extends ObjectsApiBaseIT {
 
         //then
         assertNotNull(user);
-        assertEquals(randomUserIdValue, user.getId());
+        assertEquals(randomUserIdValue, user.getId().getValue());
         assertEquals(randomName, user.getName());
         assertEquals(randomEmail, user.getEmail());
         assertEquals(randomProfileUrl, user.getProfileUrl());
@@ -62,6 +61,8 @@ public class UserIT extends ObjectsApiBaseIT {
         assertNotNull(user.getCustom());
         assertEquals(STATUS_ACTIVE, user.getStatus());
         assertEquals(TYPE_HUMAN, user.getType());
+//        assertNotNull(user.getUpdated());
+//        assertNotNull(user.getETag());
     }
 
     @Test
@@ -86,7 +87,7 @@ public class UserIT extends ObjectsApiBaseIT {
                 .sync();
 
         assertNotNull(user);
-        assertEquals(randomUserIdValue, user.getId());
+        assertEquals(randomUserIdValue, user.getId().getValue());
         assertEquals(randomName, user.getName());
         assertEquals(randomEmail, user.getEmail());
         assertEquals(randomProfileUrl, user.getProfileUrl());
@@ -94,6 +95,8 @@ public class UserIT extends ObjectsApiBaseIT {
         assertNotNull(user.getCustom());
         assertEquals(STATUS_ACTIVE, user.getStatus());
         assertEquals(TYPE_HUMAN, user.getType());
+//        assertNotNull(user.getUpdated());
+//        assertNotNull(user.getETag());
     }
 
 
@@ -138,7 +141,7 @@ public class UserIT extends ObjectsApiBaseIT {
         String updatedEmail = "updatedEmail" + randomEmail();
         String updatedProfileUrl = "updatedProfileUrl" + randomProfileUrl();
         String updatedExternalId = "updatedExternalId" + randomExternalId();
-        Map<String, Object> updateCustom = updatedCustomUserObject();
+        Map<String, Object> updatedCustom = updatedCustomUserObject();
         String updatedStatus = "updatedStatus" + STATUS_ACTIVE;
         String updatedType = "updatedType" + TYPE_HUMAN;
 
@@ -161,7 +164,7 @@ public class UserIT extends ObjectsApiBaseIT {
                 .email(updatedEmail)
                 .profileUrl(updatedProfileUrl)
                 .externalId(updatedExternalId)
-                .custom(updateCustom)
+                .custom(updatedCustom)
                 .includeCustom(true)
                 .status(updatedStatus)
                 .type(updatedType)
@@ -169,16 +172,18 @@ public class UserIT extends ObjectsApiBaseIT {
 
         // then
         assertNotNull(userAfterUpdate);
-        assertEquals(randomUserIdValue, userAfterUpdate.getId());
+        assertEquals(randomUserIdValue, userAfterUpdate.getId().getValue());
         assertEquals(updatedName, userAfterUpdate.getName());
         assertEquals(updatedEmail, userAfterUpdate.getEmail());
         assertEquals(updatedProfileUrl, userAfterUpdate.getProfileUrl());
         assertEquals(updatedExternalId, userAfterUpdate.getExternalId());
-        assertEquals("\"val1_updated\"", ((JsonObject) userAfterUpdate.getCustom()).getAsJsonObject().get("param1").toString());
-        assertEquals("\"val2_updated\"", ((JsonObject) userAfterUpdate.getCustom()).getAsJsonObject().get("param2").toString());
-        assertEquals("\"added\"", ((JsonObject) userAfterUpdate.getCustom()).getAsJsonObject().get("param3").toString());
+        assertEquals("val1_updated", userAfterUpdate.getCustom().get("param1"));
+        assertEquals("val2_updated", userAfterUpdate.getCustom().get("param2").toString());
+        assertEquals("added", userAfterUpdate.getCustom().get("param3").toString());
         assertEquals(updatedStatus, userAfterUpdate.getStatus());
         assertEquals(updatedType, userAfterUpdate.getType());
+//        assertNotNull(userAfterUpdate.getUpdated()); //waiting for https://pubnub.atlassian.net/browse/ENG-4203
+//        assertNotNull(userAfterUpdate.getETag());
 
         User user = pubNubUnderTest.fetchUser()
                 .userId(randomUserId)
@@ -186,7 +191,7 @@ public class UserIT extends ObjectsApiBaseIT {
                 .sync();
 
         assertNotNull(user);
-        assertEquals(randomUserIdValue, user.getId());
+        assertEquals(randomUserIdValue, user.getId().getValue());
         assertEquals(updatedName, user.getName());
         assertEquals(updatedEmail, user.getEmail());
         assertEquals(updatedProfileUrl, user.getProfileUrl());
@@ -194,6 +199,8 @@ public class UserIT extends ObjectsApiBaseIT {
         assertNotNull(user.getCustom());
         assertEquals(updatedStatus, user.getStatus());
         assertEquals(updatedType, user.getType());
+//        assertNotNull(user.getUpdated()); waiting on https://pubnub.atlassian.net/browse/ENG-4203
+//        assertNotNull(user.getETag());
     }
 
     @Test(expected = PubNubException.class)
@@ -231,7 +238,7 @@ public class UserIT extends ObjectsApiBaseIT {
 
         //then
         assertNotNull(user);
-        assertEquals(randomUserIdValue, user.getId());
+        assertEquals(randomUserIdValue, user.getId().getValue());
         assertEquals(randomName, user.getName());
         assertEquals(randomEmail, user.getEmail());
         assertEquals(randomProfileUrl, user.getProfileUrl());
@@ -239,6 +246,8 @@ public class UserIT extends ObjectsApiBaseIT {
         assertNotNull(user.getCustom());
         assertEquals(STATUS_ACTIVE, user.getStatus());
         assertEquals(TYPE_HUMAN, user.getType());
+//        assertNotNull(user.getUpdated());
+//        assertNotNull(user.getETag());
     }
 
     @Test
@@ -279,16 +288,18 @@ public class UserIT extends ObjectsApiBaseIT {
 
         //then
         assertNotNull(user);
-        assertEquals(randomUserIdValue, user.getId());
+        assertEquals(randomUserIdValue, user.getId().getValue());
         assertEquals(updatedName, user.getName());
         assertEquals(updatedEmail, user.getEmail());
         assertEquals(updatedProfileUrl, user.getProfileUrl());
         assertEquals(updatedExternalId, user.getExternalId());
-        assertEquals("\"val1_updated\"", ((JsonObject) user.getCustom()).getAsJsonObject().get("param1").toString());
-        assertEquals("\"val2_updated\"", ((JsonObject) user.getCustom()).getAsJsonObject().get("param2").toString());
-        assertEquals("\"added\"", ((JsonObject) user.getCustom()).getAsJsonObject().get("param3").toString());
+        assertEquals("val1_updated", user.getCustom().get("param1").toString());
+        assertEquals("val2_updated", user.getCustom().get("param2").toString());
+        assertEquals("added", user.getCustom().get("param3").toString());
         assertEquals(updatedStatus, user.getStatus());
         assertEquals(updatedType, user.getType());
+//        assertNotNull(user.getUpdated());
+//        assertNotNull(user.getETag());
     }
 
     @After

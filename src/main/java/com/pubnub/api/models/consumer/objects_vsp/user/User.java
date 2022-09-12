@@ -1,16 +1,22 @@
 package com.pubnub.api.models.consumer.objects_vsp.user;
 
-import com.pubnub.api.models.consumer.objects_api.PNObject;
-import lombok.*;
-import lombok.experimental.Accessors;
+import com.google.gson.annotations.JsonAdapter;
+import com.pubnub.api.UserId;
+import com.pubnub.api.models.consumer.objects_vsp.ObjectVsp;
+import com.pubnub.api.models.consumer.objects_vsp.util.UserIdDeserializer;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Setter;
 
-@Getter
-@Setter
-@Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@NoArgsConstructor
-public class User extends PNObject {
+import java.util.Map;
+
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@Data
+public class User extends ObjectVsp {
+    @EqualsAndHashCode.Include
+    @JsonAdapter(UserIdDeserializer.class)
+    @Setter
+    private UserId id;
     private String name;
     private String email;
     private String externalId;
@@ -18,13 +24,8 @@ public class User extends PNObject {
     private String status;
     private String type;
 
-    public User(String id, String name) {
-        super(id);
-        this.name = name;
-    }
-
     @Override
-    public User setCustom(Object custom) {
+    public User setCustom(Map<String, Object> custom) {
         super.setCustom(custom);
         return this;
     }

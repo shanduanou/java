@@ -1,37 +1,30 @@
 package com.pubnub.api.models.consumer.objects_vsp.space;
 
-import com.pubnub.api.models.consumer.objects_api.PNObject;
+import com.google.gson.annotations.JsonAdapter;
+import com.pubnub.api.SpaceId;
+import com.pubnub.api.models.consumer.objects_vsp.ObjectVsp;
+import com.pubnub.api.models.consumer.objects_vsp.util.SpaceIdDeserializer;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
 
-@Getter
-@Setter
-@Accessors(chain = true)
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-@NoArgsConstructor
-public class Space extends PNObject {
+import java.util.Map;
+
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@Data
+public class Space extends ObjectVsp {
+
+    @EqualsAndHashCode.Include
+    @JsonAdapter(SpaceIdDeserializer.class)
+    @Setter
+    private SpaceId id;
     private String name;
     private String description;
     private String status;
     private String type;
 
-    public Space(String id, String name, String description) {
-        super(id);
-        this.name = name;
-        this.description = description;
-    }
-
-    public Space(String id, String name) {
-        this(id, name, null);
-    }
-
     @Override
-    public PNObject setCustom(Object custom) {
+    public Space setCustom(Map<String, Object> custom) {
         super.setCustom(custom);
         return this;
     }

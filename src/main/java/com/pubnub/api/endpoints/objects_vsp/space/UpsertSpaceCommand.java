@@ -3,6 +3,7 @@ package com.pubnub.api.endpoints.objects_vsp.space;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
 import com.pubnub.api.SpaceId;
+import com.pubnub.api.builder.PubNubErrorBuilder;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
 import com.pubnub.api.endpoints.objects_api.utils.Include.HavingCustomInclude;
 import com.pubnub.api.enums.PNOperationType;
@@ -63,7 +64,7 @@ final class UpsertSpaceCommand extends UpsertSpace implements HavingCustomInclud
         if (input != null) {
             return input.body().getData();
         } else {
-            return new Space();
+            throw PubNubException.builder().pubnubError(PubNubErrorBuilder.PNERROBJ_INTERNAL_ERROR).build();
         }
     }
 

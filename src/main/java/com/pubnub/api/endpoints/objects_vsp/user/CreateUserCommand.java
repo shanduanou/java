@@ -2,6 +2,7 @@ package com.pubnub.api.endpoints.objects_vsp.user;
 
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
+import com.pubnub.api.builder.PubNubErrorBuilder;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
 import com.pubnub.api.endpoints.objects_api.utils.Include.HavingCustomInclude;
 import com.pubnub.api.enums.PNOperationType;
@@ -70,7 +71,7 @@ final class CreateUserCommand extends CreateUser implements HavingCustomInclude<
         if (input.body() != null) {
             return input.body().getData();
         } else {
-            return new User();
+            throw PubNubException.builder().pubnubError(PubNubErrorBuilder.PNERROBJ_INTERNAL_ERROR).build();
         }
     }
 

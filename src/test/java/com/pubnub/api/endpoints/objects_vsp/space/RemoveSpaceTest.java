@@ -36,7 +36,7 @@ public class RemoveSpaceTest extends BaseObjectApiTest {
         objectUnderTest = new RemoveSpace(new SpaceId(testSpaceIdValue), pubNubMock, telemetryManagerMock, retrofitManagerMock, new TokenManager());
         when(retrofitManagerMock.getSpaceService()).thenReturn(spaceServiceMock);
         when(spaceServiceMock.removeSpace(eq(testSubscriptionKey), eq(testSpaceIdValue), any())).thenReturn(call);
-        when(call.execute()).thenReturn(Response.success(new RemoveSpaceResult()));
+        when(call.execute()).thenReturn(Response.success(new EntityEnvelope<>()));
     }
 
     @Test

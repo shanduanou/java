@@ -3,6 +3,7 @@ package com.pubnub.api.endpoints.objects_vsp.space;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
 import com.pubnub.api.SpaceId;
+import com.pubnub.api.builder.PubNubErrorBuilder;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
 import com.pubnub.api.endpoints.objects_api.utils.Include.HavingCustomInclude;
 import com.pubnub.api.enums.PNOperationType;
@@ -54,7 +55,7 @@ final class CreateSpaceCommand extends CreateSpace implements HavingCustomInclud
             customHashMap.putAll(custom);
         }
 
-        final CreateSpacePayload createSpacePayload = new CreateSpacePayload(name, description, custom, status, type);
+        final CreateSpacePayload createSpacePayload = new CreateSpacePayload(name, description, customHashMap, status, type);
         String subscribeKey = getPubnub().getConfiguration().getSubscribeKey();
         return getRetrofit()
                 .getSpaceService()
@@ -71,7 +72,7 @@ final class CreateSpaceCommand extends CreateSpace implements HavingCustomInclud
         if (input.body() != null) {
             return input.body().getData();
         } else {
-            return new Space();
+            throw PubNubException.builder().pubnubError(PubNubErrorBuilder.PNERROBJ_INTERNAL_ERROR).build();
         }
     }
 

@@ -40,7 +40,8 @@ public class RemoveSpace extends ObjectApiEndpoint<EntityEnvelope<JsonElement>, 
 
     @Override
     protected RemoveSpaceResult createResponse(Response<EntityEnvelope<JsonElement>> input) throws PubNubException {
-        return new RemoveSpaceResult(input.body());
+        int status = input.body().getStatus();
+        return new RemoveSpaceResult(status);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.pubnub.api.integration.objects_vsp.space;
 
-import com.google.gson.JsonObject;
 import com.pubnub.api.PubNubException;
 import com.pubnub.api.SpaceId;
 import com.pubnub.api.integration.objects.ObjectsApiBaseIT;
@@ -46,13 +45,17 @@ public class SpaceIT extends ObjectsApiBaseIT {
 
         //then
         assertNotNull(space);
-        assertEquals(randomSpaceIdValue, space.getId());
+        assertEquals(randomSpaceId.getValue(), space.getId().getValue());
         assertEquals(randomName, space.getName());
         assertEquals(randomDescription, space.getDescription());
-        assertNotNull(space.getCustom());
+        assertEquals("val1", space.getCustom().get("param1").toString());
+        assertEquals("val2", space.getCustom().get("param2").toString());
         assertEquals(STATUS_ACTIVE, space.getStatus());
         assertEquals(TYPE_HUMAN, space.getType());
+//        assertNotNull(space.getUpdated()); waiting on https://pubnub.atlassian.net/browse/ENG-4203
+//        assertNotNull(space.getETag());
     }
+
 
     @Test(expected = PubNubException.class)
     public void should_throw_exception_when_space_with_the_spaceId_exists() throws PubNubException {
@@ -96,8 +99,6 @@ public class SpaceIT extends ObjectsApiBaseIT {
 
         //then
         assertEquals(HttpStatus.SC_OK, removeSpaceResult.getStatus());
-
-
     }
 
     @Test
@@ -118,13 +119,14 @@ public class SpaceIT extends ObjectsApiBaseIT {
 
         //then
         assertNotNull(space);
-        assertEquals(randomSpaceIdValue, space.getId());
+        assertEquals(randomSpaceIdValue, space.getId().getValue());
         assertEquals(randomName, space.getName());
         assertEquals(randomDescription, space.getDescription());
         assertNotNull(space.getCustom());
         assertEquals(STATUS_ACTIVE, space.getStatus());
         assertEquals(TYPE_HUMAN, space.getType());
-
+//        assertNotNull(space.getUpdated());
+//        assertNotNull(space.getETag());
     }
 
     @Test
@@ -156,26 +158,30 @@ public class SpaceIT extends ObjectsApiBaseIT {
 
         //then
         assertNotNull(updatedSpace);
-        assertEquals(randomSpaceIdValue, updatedSpace.getId());
+        assertEquals(randomSpaceIdValue, updatedSpace.getId().getValue());
         assertEquals(updatedName, updatedSpace.getName());
         assertEquals(updatedDescription, updatedSpace.getDescription());
         assertEquals(updatedDescription, updatedSpace.getDescription());
-        assertEquals("\"val1_updated\"", ((JsonObject) updatedSpace.getCustom()).getAsJsonObject().get("param1").toString());
-        assertEquals("\"val2_updated\"", ((JsonObject) updatedSpace.getCustom()).getAsJsonObject().get("param2").toString());
-        assertEquals("\"added\"", ((JsonObject) updatedSpace.getCustom()).getAsJsonObject().get("param3").toString());
+        assertEquals("val1_updated", updatedSpace.getCustom().get("param1").toString());
+        assertEquals("val2_updated", updatedSpace.getCustom().get("param2").toString());
+        assertEquals("added", updatedSpace.getCustom().get("param3").toString());
         assertEquals(updatedStatus, updatedSpace.getStatus());
         assertEquals(updatedType, updatedSpace.getType());
+//        assertNotNull(updatedSpace.getUpdated());
+//        assertNotNull(updatedSpace.getETag());
 
         Space space = pubNubUnderTest.fetchSpace(randomSpaceId)
                 .sync();
 
         assertNotNull(space);
-        assertEquals(randomSpaceIdValue, space.getId());
+        assertEquals(randomSpaceIdValue, space.getId().getValue());
         assertEquals(updatedName, space.getName());
         assertEquals(updatedDescription, space.getDescription());
         assertNotNull(space.getCustom());
         assertEquals(updatedStatus, space.getStatus());
         assertEquals(updatedType, space.getType());
+//        assertNotNull(space.getUpdated());
+//        assertNotNull(space.getETag());
     }
 
     @Test(expected = PubNubException.class)
@@ -208,12 +214,14 @@ public class SpaceIT extends ObjectsApiBaseIT {
 
         //then
         assertNotNull(space);
-        assertEquals(randomSpaceIdValue, space.getId());
+        assertEquals(randomSpaceIdValue, space.getId().getValue());
         assertEquals(randomName, space.getName());
         assertEquals(randomDescription, space.getDescription());
         assertNotNull(space.getCustom());
         assertEquals(STATUS_ACTIVE, space.getStatus());
         assertEquals(TYPE_HUMAN, space.getType());
+//        assertNotNull(space.getUpdated());
+//        assertNotNull(space.getETag());
     }
 
     @Test
@@ -245,26 +253,30 @@ public class SpaceIT extends ObjectsApiBaseIT {
 
         //then
         assertNotNull(spaceAfterUpsert);
-        assertEquals(randomSpaceIdValue, spaceAfterUpsert.getId());
+        assertEquals(randomSpaceIdValue, spaceAfterUpsert.getId().getValue());
         assertEquals(updatedName, spaceAfterUpsert.getName());
         assertEquals(updatedDescription, spaceAfterUpsert.getDescription());
         assertEquals(updatedDescription, spaceAfterUpsert.getDescription());
-        assertEquals("\"val1_updated\"", ((JsonObject) spaceAfterUpsert.getCustom()).getAsJsonObject().get("param1").toString());
-        assertEquals("\"val2_updated\"", ((JsonObject) spaceAfterUpsert.getCustom()).getAsJsonObject().get("param2").toString());
-        assertEquals("\"added\"", ((JsonObject) spaceAfterUpsert.getCustom()).getAsJsonObject().get("param3").toString());
+        assertEquals("val1_updated", spaceAfterUpsert.getCustom().get("param1").toString());
+        assertEquals("val2_updated", spaceAfterUpsert.getCustom().get("param2").toString());
+        assertEquals("added", spaceAfterUpsert.getCustom().get("param3").toString());
         assertEquals(updatedStatus, spaceAfterUpsert.getStatus());
         assertEquals(updatedType, spaceAfterUpsert.getType());
+//        assertNotNull(spaceAfterUpsert.getUpdated());
+//        assertNotNull(spaceAfterUpsert.getETag());
 
         Space space = pubNubUnderTest.fetchSpace(randomSpaceId)
                 .sync();
 
         assertNotNull(space);
-        assertEquals(randomSpaceIdValue, space.getId());
+        assertEquals(randomSpaceIdValue, space.getId().getValue());
         assertEquals(updatedName, space.getName());
         assertEquals(updatedDescription, space.getDescription());
         assertNotNull(space.getCustom());
         assertEquals(updatedStatus, space.getStatus());
         assertEquals(updatedType, space.getType());
+//        assertNotNull(space.getUpdated());
+//        assertNotNull(space.getETag());
     }
 
     @After
