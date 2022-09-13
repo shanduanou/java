@@ -1,46 +1,18 @@
 package com.pubnub.api.endpoints.objects_vsp.user;
 
 import com.pubnub.api.PubNub;
-import com.pubnub.api.PubNubException;
-import com.pubnub.api.UserId;
-import com.pubnub.api.builder.PubNubErrorBuilder;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
-import com.pubnub.api.endpoints.objects_api.ObjectApiEndpoint;
-import com.pubnub.api.endpoints.objects_api.utils.Include.HavingCustomInclude;
-import com.pubnub.api.enums.PNOperationType;
+import com.pubnub.api.endpoints.objects_api.utils.Include.CustomIncludeAware;
+import com.pubnub.api.endpoints.objects_vsp.UserEndpoint;
 import com.pubnub.api.managers.RetrofitManager;
 import com.pubnub.api.managers.TelemetryManager;
 import com.pubnub.api.managers.token_manager.TokenManager;
 import com.pubnub.api.models.consumer.objects_vsp.user.User;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
-import com.pubnub.api.models.server.objects_vsp.user.UpdateUserPayload;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-import retrofit2.Call;
-import retrofit2.Response;
 
-import java.util.HashMap;
 import java.util.Map;
 
-@Accessors(chain = true, fluent = true)
-public class UpdateUser extends ObjectApiEndpoint<EntityEnvelope<User>, User> implements HavingCustomInclude<UpdateUser> {
-    @Setter
-    private UserId userId;
-    @Setter
-    private String name;
-    @Setter
-    private String email;
-    @Setter
-    private String profileUrl;
-    @Setter
-    private String externalId;
-    @Setter
-    private Map<String, Object> custom;
-    @Setter
-    private String status;
-    @Setter
-    private String type;
-
+public abstract class UpdateUser extends UserEndpoint<UpdateUser, EntityEnvelope<User>, User> implements CustomIncludeAware<UpdateUser> {
     UpdateUser(
             final PubNub pubNub,
             final TelemetryManager telemetryManager,
@@ -56,49 +28,20 @@ public class UpdateUser extends ObjectApiEndpoint<EntityEnvelope<User>, User> im
             final RetrofitManager retrofitManager,
             final TokenManager tokenManager) {
         final CompositeParameterEnricher compositeParameterEnricher = CompositeParameterEnricher.createDefault();
-        return new UpdateUser(pubNub, telemetryManager, retrofitManager, compositeParameterEnricher, tokenManager);
+        return new UpdateUserCommand(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
     }
 
-    @Override
-    protected Call<EntityEnvelope<User>> executeCommand(Map<String, String> effectiveParams) throws PubNubException {
-        //This is workaround to accept custom maps that are instances of anonymous classes not handled by gson
-        final HashMap<String, Object> customHashMap = new HashMap<>();
-        if (custom != null) {
-            customHashMap.putAll(custom);
-        }
+    public abstract UpdateUser name(String name);
 
-        final UpdateUserPayload updateUserPayload = new UpdateUserPayload(name, email, externalId, profileUrl, customHashMap, status, type);
+    public abstract UpdateUser email(String email);
 
-        String subscribeKey = getPubnub().getConfiguration().getSubscribeKey();
-        return getRetrofit()
-                .getUserService()
-                .updateUser(subscribeKey, effectiveUserId().getValue(), updateUserPayload, effectiveParams);
-    }
+    public abstract UpdateUser profileUrl(String profileUrl);
 
-    @Override
-    protected User createResponse(Response<EntityEnvelope<User>> input) throws PubNubException {
-        if (input.body() != null) {
-            return input.body().getData();
-        } else {
-            throw PubNubException.builder().pubnubError(PubNubErrorBuilder.PNERROBJ_INTERNAL_ERROR).build();
-        }
-    }
+    public abstract UpdateUser externalId(String externalId);
 
-    @Override
-    protected PNOperationType getOperationType() {
-        return PNOperationType.PNUpdateUserOperation;
-    }
+    public abstract UpdateUser custom(Map<String, Object> custom);
 
-    @Override
-    public CompositeParameterEnricher getCompositeParameterEnricher() {
-        return super.getCompositeParameterEnricher();
-    }
+    public abstract UpdateUser status(String status);
 
-    private UserId effectiveUserId() {
-        try {
-            return (userId != null) ? userId : getPubnub().getConfiguration().getUserId();
-        } catch (PubNubException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public abstract UpdateUser type(String type);
 }
