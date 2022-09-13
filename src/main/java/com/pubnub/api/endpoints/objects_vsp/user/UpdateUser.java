@@ -1,28 +1,20 @@
 package com.pubnub.api.endpoints.objects_vsp.user;
 
 import com.pubnub.api.PubNub;
+import com.pubnub.api.UserId;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
 import com.pubnub.api.endpoints.objects_api.utils.Include.CustomIncludeAware;
-import com.pubnub.api.endpoints.objects_vsp.UserEndpoint;
+import com.pubnub.api.endpoints.remoteaction.RemoteAction;
 import com.pubnub.api.managers.RetrofitManager;
 import com.pubnub.api.managers.TelemetryManager;
 import com.pubnub.api.managers.token_manager.TokenManager;
 import com.pubnub.api.models.consumer.objects_vsp.user.User;
-import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 
 import java.util.Map;
 
-public abstract class UpdateUser extends UserEndpoint<UpdateUser, EntityEnvelope<User>, User> implements CustomIncludeAware<UpdateUser> {
-    UpdateUser(
-            final PubNub pubNub,
-            final TelemetryManager telemetryManager,
-            final RetrofitManager retrofitManager,
-            final CompositeParameterEnricher compositeParameterEnricher,
-            final TokenManager tokenManager) {
-        super(pubNub, telemetryManager, retrofitManager, compositeParameterEnricher, tokenManager);
-    }
+public interface UpdateUser extends RemoteAction<User>, CustomIncludeAware<UpdateUser> {
 
-    public static UpdateUser create(
+    static UpdateUser create(
             final PubNub pubNub,
             final TelemetryManager telemetryManager,
             final RetrofitManager retrofitManager,
@@ -31,17 +23,19 @@ public abstract class UpdateUser extends UserEndpoint<UpdateUser, EntityEnvelope
         return new UpdateUserCommand(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
     }
 
-    public abstract UpdateUser name(String name);
+    UpdateUser userId(UserId userId);
 
-    public abstract UpdateUser email(String email);
+    UpdateUser name(String name);
 
-    public abstract UpdateUser profileUrl(String profileUrl);
+    UpdateUser email(String email);
 
-    public abstract UpdateUser externalId(String externalId);
+    UpdateUser profileUrl(String profileUrl);
 
-    public abstract UpdateUser custom(Map<String, Object> custom);
+    UpdateUser externalId(String externalId);
 
-    public abstract UpdateUser status(String status);
+    UpdateUser custom(Map<String, Object> custom);
 
-    public abstract UpdateUser type(String type);
+    UpdateUser status(String status);
+
+    UpdateUser type(String type);
 }

@@ -1,28 +1,20 @@
 package com.pubnub.api.endpoints.objects_vsp.user;
 
 import com.pubnub.api.PubNub;
+import com.pubnub.api.UserId;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
 import com.pubnub.api.endpoints.objects_api.utils.Include.CustomIncludeAware;
-import com.pubnub.api.endpoints.objects_vsp.UserEndpoint;
+import com.pubnub.api.endpoints.remoteaction.RemoteAction;
 import com.pubnub.api.managers.RetrofitManager;
 import com.pubnub.api.managers.TelemetryManager;
 import com.pubnub.api.managers.token_manager.TokenManager;
 import com.pubnub.api.models.consumer.objects_vsp.user.User;
-import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 
 import java.util.Map;
 
-public abstract class UpsertUser extends UserEndpoint<UpsertUser, EntityEnvelope<User>, User> implements CustomIncludeAware<UpsertUser> {
-    UpsertUser(
-            final PubNub pubNub,
-            final TelemetryManager telemetry,
-            final RetrofitManager retrofitInstance,
-            final TokenManager tokenManager,
-            final CompositeParameterEnricher compositeParameterEnricher) {
-        super(pubNub, telemetry, retrofitInstance, compositeParameterEnricher, tokenManager);
-    }
+public interface UpsertUser extends RemoteAction<User>, CustomIncludeAware<UpsertUser> {
 
-    public static UpsertUser create(
+    static UpsertUser create(
             final PubNub pubNub,
             final TelemetryManager telemetryManager,
             final RetrofitManager retrofitManager,
@@ -31,17 +23,19 @@ public abstract class UpsertUser extends UserEndpoint<UpsertUser, EntityEnvelope
         return new UpsertUserCommand(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
     }
 
-    public abstract UpsertUser name(String name);
+    UpsertUser userId(UserId userId);
 
-    public abstract UpsertUser email(String email);
+    UpsertUser name(String name);
 
-    public abstract UpsertUser profileUrl(String profileUrl);
+    UpsertUser email(String email);
 
-    public abstract UpsertUser externalId(String externalId);
+    UpsertUser profileUrl(String profileUrl);
 
-    public abstract UpsertUser custom(Map<String, Object> custom);
+    UpsertUser externalId(String externalId);
 
-    public abstract UpsertUser status(String status);
+    UpsertUser custom(Map<String, Object> custom);
 
-    public abstract UpsertUser type(String type);
+    UpsertUser status(String status);
+
+    UpsertUser type(String type);
 }

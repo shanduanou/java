@@ -5,6 +5,7 @@ import com.pubnub.api.PubNubException;
 import com.pubnub.api.SpaceId;
 import com.pubnub.api.builder.PubNubErrorBuilder;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
+import com.pubnub.api.endpoints.objects_api.ObjectApiEndpoint;
 import com.pubnub.api.endpoints.objects_api.utils.Include.HavingCustomInclude;
 import com.pubnub.api.enums.PNOperationType;
 import com.pubnub.api.managers.RetrofitManager;
@@ -17,7 +18,7 @@ import retrofit2.Response;
 
 import java.util.Map;
 
-final class FetchSpaceCommand extends FetchSpace implements HavingCustomInclude<FetchSpace> {
+final class FetchSpaceCommand extends ObjectApiEndpoint<EntityEnvelope<Space>, Space>  implements FetchSpace, HavingCustomInclude<FetchSpace> {
     private SpaceId spaceId;
 
     FetchSpaceCommand(
@@ -27,7 +28,7 @@ final class FetchSpaceCommand extends FetchSpace implements HavingCustomInclude<
             final RetrofitManager retrofitManager,
             final TokenManager tokenManager,
             final CompositeParameterEnricher compositeParameterEnricher) {
-        super(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
+        super(pubNub, telemetryManager, retrofitManager, compositeParameterEnricher, tokenManager);
         this.spaceId = spaceId;
     }
 

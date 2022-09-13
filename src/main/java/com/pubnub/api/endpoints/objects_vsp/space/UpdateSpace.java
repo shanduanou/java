@@ -3,27 +3,18 @@ package com.pubnub.api.endpoints.objects_vsp.space;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.SpaceId;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
-import com.pubnub.api.endpoints.objects_api.ObjectApiEndpoint;
 import com.pubnub.api.endpoints.objects_api.utils.Include.CustomIncludeAware;
+import com.pubnub.api.endpoints.remoteaction.RemoteAction;
 import com.pubnub.api.managers.RetrofitManager;
 import com.pubnub.api.managers.TelemetryManager;
 import com.pubnub.api.managers.token_manager.TokenManager;
 import com.pubnub.api.models.consumer.objects_vsp.space.Space;
-import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 
 import java.util.Map;
 
-public abstract class UpdateSpace extends ObjectApiEndpoint<EntityEnvelope<Space>, Space> implements CustomIncludeAware<UpdateSpace> {
-    public UpdateSpace(
-            final PubNub pubNub,
-            final TelemetryManager telemetry,
-            final RetrofitManager retrofitInstance,
-            final TokenManager tokenManager,
-            final CompositeParameterEnricher compositeParameterEnricher) {
-        super(pubNub, telemetry, retrofitInstance, compositeParameterEnricher, tokenManager);
-    }
+public interface UpdateSpace extends RemoteAction<Space>, CustomIncludeAware<UpdateSpace> {
 
-    public static UpdateSpace create(
+    static UpdateSpace create(
             final SpaceId spaceId,
             final PubNub pubNub,
             final TelemetryManager telemetryManager,
@@ -33,14 +24,14 @@ public abstract class UpdateSpace extends ObjectApiEndpoint<EntityEnvelope<Space
         return new UpdateSpaceCommand(spaceId, pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
     }
 
-    public abstract UpdateSpace name(String name);
+    UpdateSpace name(String name);
 
-    public abstract UpdateSpace description(String description);
+    UpdateSpace description(String description);
 
-    public abstract UpdateSpace custom(Map<String, Object> custom);
+    UpdateSpace custom(Map<String, Object> custom);
 
-    public abstract UpdateSpace status(String status);
+    UpdateSpace status(String status);
 
-    public abstract UpdateSpace type(String type);
+    UpdateSpace type(String type);
 
 }

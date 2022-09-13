@@ -2,8 +2,10 @@ package com.pubnub.api.endpoints.objects_vsp.user;
 
 import com.pubnub.api.PubNub;
 import com.pubnub.api.PubNubException;
+import com.pubnub.api.UserId;
 import com.pubnub.api.builder.PubNubErrorBuilder;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
+import com.pubnub.api.endpoints.objects_api.ObjectApiEndpoint;
 import com.pubnub.api.endpoints.objects_api.utils.Include.HavingCustomInclude;
 import com.pubnub.api.enums.PNOperationType;
 import com.pubnub.api.managers.RetrofitManager;
@@ -21,7 +23,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Accessors(chain = true, fluent = true)
-final class CreateUserCommand extends CreateUser implements HavingCustomInclude<CreateUser> {
+final class CreateUserCommand extends ObjectApiEndpoint<EntityEnvelope<User>, User> implements CreateUser, HavingCustomInclude<CreateUser> {
+    @Setter
+    private UserId userId;
     @Setter
     private String name;
     @Setter
@@ -43,7 +47,7 @@ final class CreateUserCommand extends CreateUser implements HavingCustomInclude<
             final RetrofitManager retrofitManager,
             final TokenManager tokenManager,
             final CompositeParameterEnricher compositeParameterEnricher) {
-        super(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
+        super(pubNub, telemetryManager, retrofitManager, compositeParameterEnricher, tokenManager);
     }
 
     @Override
@@ -79,4 +83,13 @@ final class CreateUserCommand extends CreateUser implements HavingCustomInclude<
     protected PNOperationType getOperationType() {
         return PNOperationType.PNCreateUserOperation;
     }
+
+    private UserId effectiveUserId() {
+        try {
+            return (userId != null) ? userId : getPubnub().getConfiguration().getUserId();
+        } catch (PubNubException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

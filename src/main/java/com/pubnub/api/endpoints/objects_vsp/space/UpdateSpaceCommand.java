@@ -5,6 +5,7 @@ import com.pubnub.api.PubNubException;
 import com.pubnub.api.SpaceId;
 import com.pubnub.api.builder.PubNubErrorBuilder;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
+import com.pubnub.api.endpoints.objects_api.ObjectApiEndpoint;
 import com.pubnub.api.endpoints.objects_api.utils.Include.HavingCustomInclude;
 import com.pubnub.api.enums.PNOperationType;
 import com.pubnub.api.managers.RetrofitManager;
@@ -22,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Accessors(chain = true, fluent = true)
-final class UpdateSpaceCommand extends UpdateSpace implements HavingCustomInclude<UpdateSpace> {
+final class UpdateSpaceCommand extends ObjectApiEndpoint<EntityEnvelope<Space>, Space>  implements UpdateSpace, HavingCustomInclude<UpdateSpace> {
     private final SpaceId spaceId;
     @Setter
     private String name;
@@ -42,7 +43,7 @@ final class UpdateSpaceCommand extends UpdateSpace implements HavingCustomInclud
             final RetrofitManager retrofitManager,
             final TokenManager tokenManager,
             final CompositeParameterEnricher compositeParameterEnricher) {
-        super(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
+        super(pubNub, telemetryManager, retrofitManager, compositeParameterEnricher, tokenManager);
         this.spaceId = spaceId;
     }
 

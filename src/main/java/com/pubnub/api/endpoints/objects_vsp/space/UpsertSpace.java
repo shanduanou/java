@@ -3,27 +3,18 @@ package com.pubnub.api.endpoints.objects_vsp.space;
 import com.pubnub.api.PubNub;
 import com.pubnub.api.SpaceId;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
-import com.pubnub.api.endpoints.objects_api.ObjectApiEndpoint;
 import com.pubnub.api.endpoints.objects_api.utils.Include.CustomIncludeAware;
+import com.pubnub.api.endpoints.remoteaction.RemoteAction;
 import com.pubnub.api.managers.RetrofitManager;
 import com.pubnub.api.managers.TelemetryManager;
 import com.pubnub.api.managers.token_manager.TokenManager;
 import com.pubnub.api.models.consumer.objects_vsp.space.Space;
-import com.pubnub.api.models.server.objects_api.EntityEnvelope;
 
 import java.util.Map;
 
-public abstract class UpsertSpace extends ObjectApiEndpoint<EntityEnvelope<Space>, Space> implements CustomIncludeAware<UpsertSpace> {
-    public UpsertSpace(
-            final PubNub pubNub,
-            final TelemetryManager telemetry,
-            final RetrofitManager retrofitInstance,
-            final TokenManager tokenManager,
-            final CompositeParameterEnricher compositeParameterEnricher) {
-        super(pubNub, telemetry, retrofitInstance, compositeParameterEnricher, tokenManager);
-    }
+public interface UpsertSpace extends RemoteAction<Space>, CustomIncludeAware<UpsertSpace> {
 
-    public static UpsertSpace create(
+    static UpsertSpace create(
             final SpaceId spaceId,
             final PubNub pubNub,
             final TelemetryManager telemetryManager,
@@ -33,13 +24,13 @@ public abstract class UpsertSpace extends ObjectApiEndpoint<EntityEnvelope<Space
         return new UpsertSpaceCommand(spaceId, pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
     }
 
-    public abstract UpsertSpace name(String name);
+    UpsertSpace name(String name);
 
-    public abstract UpsertSpace description(String description);
+    UpsertSpace description(String description);
 
-    public abstract UpsertSpace custom(Map<String, Object> custom);
+    UpsertSpace custom(Map<String, Object> custom);
 
-    public abstract UpsertSpace status(String status);
+    UpsertSpace status(String status);
 
-    public abstract UpsertSpace type(String type);
+    UpsertSpace type(String type);
 }
