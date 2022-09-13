@@ -1,18 +1,46 @@
 package com.pubnub.api.endpoints.objects_vsp.user;
 
 import com.pubnub.api.PubNub;
+import com.pubnub.api.PubNubException;
+import com.pubnub.api.UserId;
+import com.pubnub.api.builder.PubNubErrorBuilder;
 import com.pubnub.api.endpoints.objects_api.CompositeParameterEnricher;
-import com.pubnub.api.endpoints.objects_api.utils.Include.CustomIncludeAware;
-import com.pubnub.api.endpoints.objects_vsp.UserEndpoint;
+import com.pubnub.api.endpoints.objects_api.ObjectApiEndpoint;
+import com.pubnub.api.endpoints.objects_api.utils.Include.HavingCustomInclude;
+import com.pubnub.api.enums.PNOperationType;
 import com.pubnub.api.managers.RetrofitManager;
 import com.pubnub.api.managers.TelemetryManager;
 import com.pubnub.api.managers.token_manager.TokenManager;
 import com.pubnub.api.models.consumer.objects_vsp.user.User;
 import com.pubnub.api.models.server.objects_api.EntityEnvelope;
+import com.pubnub.api.models.server.objects_vsp.user.UpsertUserPayload;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import retrofit2.Call;
+import retrofit2.Response;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public abstract class UpsertUser extends UserEndpoint<UpsertUser, EntityEnvelope<User>, User> implements CustomIncludeAware<UpsertUser> {
+@Accessors(chain = true, fluent = true)
+public class UpsertUser extends ObjectApiEndpoint<EntityEnvelope<User>, User> implements HavingCustomInclude<UpsertUser> {
+    @Setter
+    private UserId userId;
+    @Setter
+    private String name;
+    @Setter
+    private String email;
+    @Setter
+    private String profileUrl;
+    @Setter
+    private String externalId;
+    @Setter
+    private Map<String, Object> custom;
+    @Setter
+    private String status;
+    @Setter
+    private String type;
+
     UpsertUser(
             final PubNub pubNub,
             final TelemetryManager telemetry,
@@ -28,20 +56,46 @@ public abstract class UpsertUser extends UserEndpoint<UpsertUser, EntityEnvelope
             final RetrofitManager retrofitManager,
             final TokenManager tokenManager) {
         final CompositeParameterEnricher compositeParameterEnricher = CompositeParameterEnricher.createDefault();
-        return new UpsertUserCommand(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
+        return new UpsertUser(pubNub, telemetryManager, retrofitManager, tokenManager, compositeParameterEnricher);
     }
 
-    public abstract UpsertUser name(String name);
+    @Override
+    protected Call<EntityEnvelope<User>> executeCommand(Map<String, String> effectiveParams) throws PubNubException {
+        final HashMap<String, Object> customHashMap = new HashMap<>();
+        if (custom != null) {
+            customHashMap.putAll(custom);
+        }
 
-    public abstract UpsertUser email(String email);
+        final UpsertUserPayload upsertUserPayload = new UpsertUserPayload(name, email, externalId, profileUrl, customHashMap, status, type);
 
-    public abstract UpsertUser profileUrl(String profileUrl);
+        String subscribeKey = getPubnub().getConfiguration().getSubscribeKey();
+        return getRetrofit().getUserService().upsertUser(subscribeKey, effectiveUserId().getValue(), upsertUserPayload, effectiveParams);
+    }
 
-    public abstract UpsertUser externalId(String externalId);
+    @Override
+    protected User createResponse(Response<EntityEnvelope<User>> input) throws PubNubException {
+        if (input.body() != null) {
+            return input.body().getData();
+        } else {
+            throw PubNubException.builder().pubnubError(PubNubErrorBuilder.PNERROBJ_INTERNAL_ERROR).build();
+        }
+    }
 
-    public abstract UpsertUser custom(Map<String, Object> custom);
+    @Override
+    protected PNOperationType getOperationType() {
+        return PNOperationType.PNUpsertUserOperation;
+    }
 
-    public abstract UpsertUser status(String status);
+    @Override
+    public CompositeParameterEnricher getCompositeParameterEnricher() {
+        return super.getCompositeParameterEnricher();
+    }
 
-    public abstract UpsertUser type(String type);
+    private UserId effectiveUserId() {
+        try {
+            return (userId != null) ? userId : getPubnub().getConfiguration().getUserId();
+        } catch (PubNubException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
