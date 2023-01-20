@@ -377,7 +377,7 @@ public final class PubNubErrorBuilder {
     public static final int PNERR_PNMESSAGETYPE_NULL_OR_EMPTY = 173;
 
     /**
-     * UserMessageType can't be null nor empty
+     * Unknown pnMessageType "e" field from server
      */
     public static final int PNERR_UNKNOWN_MESSAGE_TYPE = 174;
 
