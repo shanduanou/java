@@ -1,1 +1,3 @@
 rootProject.name = 'pubnub-gson'
+include 'kotlin-publish'
+

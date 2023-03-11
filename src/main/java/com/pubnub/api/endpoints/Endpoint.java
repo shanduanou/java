@@ -10,12 +10,14 @@ import com.pubnub.api.callbacks.PNCallback;
 import com.pubnub.api.endpoints.remoteaction.RemoteAction;
 import com.pubnub.api.enums.PNOperationType;
 import com.pubnub.api.enums.PNStatusCategory;
+import com.pubnub.api.kotlin.Person;
 import com.pubnub.api.managers.MapperManager;
 import com.pubnub.api.managers.RetrofitManager;
 import com.pubnub.api.managers.TelemetryManager;
 import com.pubnub.api.managers.token_manager.TokenManager;
 import com.pubnub.api.models.consumer.PNErrorData;
 import com.pubnub.api.models.consumer.PNStatus;
+import com.pubnub.publish.Publish;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -83,49 +85,71 @@ public abstract class Endpoint<Input, Output> implements RemoteAction<Output> {
         this.telemetryManager = telemetry;
     }
 
+    public boolean useKotlin(){
+        return false;
+    }
+
     @Override
     @Nullable
     public Output sync() throws PubNubException {
         this.validateParams();
 
-        call = doWork(createBaseParams());
-        Response<Input> serverResponse;
-        Output response;
+        if (useKotlin()) {
+            new Publish(pubnub, "channel", "message")
+//                    meta = meta,
+//                    shouldStore = shouldStore,
+//                    usePost = usePost,
+//                    replicate = replicate,
+//                    ttl = ttl
+            )
 
-        try {
-            serverResponse = call.execute();
-        } catch (IOException e) {
-            throw PubNubException.builder()
-                    .pubnubError(PubNubErrorBuilder.PNERROBJ_PARSING_ERROR)
-                    .errormsg(e.toString())
-                    .affectedCall(call)
-                    .cause(e)
-                    .build();
-        }
+            Person ben = new Person("Ben");
+            ben.printName();
+            System.out.println("hurrra");
 
-        if (isError(serverResponse)) {
-            String responseBodyText;
-            JsonElement responseBody;
+
+            //old way
+        } else {
+            call = doWork(createBaseParams());
+            Response<Input> serverResponse;
+            Output response;
 
             try {
-                responseBodyText = serverResponse.errorBody().string();
+                serverResponse = call.execute();
             } catch (IOException e) {
-                responseBodyText = "N/A";
+                throw PubNubException.builder()
+                        .pubnubError(PubNubErrorBuilder.PNERROBJ_PARSING_ERROR)
+                        .errormsg(e.toString())
+                        .affectedCall(call)
+                        .cause(e)
+                        .build();
             }
 
-            try {
-                responseBody = mapper.fromJson(responseBodyText, JsonElement.class);
-            } catch (PubNubException e) {
-                responseBody = null;
+            if (isError(serverResponse)) {
+                String responseBodyText;
+                JsonElement responseBody;
+
+                try {
+                    responseBodyText = serverResponse.errorBody().string();
+                } catch (IOException e) {
+                    responseBodyText = "N/A";
+                }
+
+                try {
+                    responseBody = mapper.fromJson(responseBodyText, JsonElement.class);
+                } catch (PubNubException e) {
+                    responseBody = null;
+                }
+
+                throw createPubNubException(serverResponse, responseBodyText, responseBody);
             }
 
-            throw createPubNubException(serverResponse, responseBodyText, responseBody);
+            storeRequestLatency(serverResponse, getOperationType());
+            response = createResponse(serverResponse);
+
+            return response;
         }
-
-        storeRequestLatency(serverResponse, getOperationType());
-        response = createResponse(serverResponse);
-
-        return response;
+        return null;
     }
 
     @Override

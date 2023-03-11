@@ -13,6 +13,8 @@ import com.pubnub.api.managers.TelemetryManager;
 import com.pubnub.api.managers.token_manager.TokenManager;
 import com.pubnub.api.models.consumer.PNPublishResult;
 import com.pubnub.api.vendor.Crypto;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import retrofit2.Call;
@@ -39,6 +41,8 @@ public class Publish extends Endpoint<List<Object>, PNPublishResult> {
     private Boolean replicate;
     @Setter
     private Integer ttl;
+    @Getter(AccessLevel.PROTECTED)
+    private boolean useKotlin;
 
     private PublishSequenceManager publishSequenceManager;
 
@@ -51,6 +55,10 @@ public class Publish extends Endpoint<List<Object>, PNPublishResult> {
 
         this.publishSequenceManager = providedPublishSequenceManager;
         this.replicate = true;
+    }
+
+    public boolean useKotlin(){
+        return true;
     }
 
     @Override

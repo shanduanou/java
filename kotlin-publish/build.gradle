@@ -1,0 +1,35 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.7.20'
+    id 'java'
+}
+
+group 'com.pubnub'
+version '6.3.4'
+
+repositories {
+    mavenCentral()
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    api 'com.google.code.gson:gson:2.8.6'
+    api "com.squareup.okhttp3:logging-interceptor:3.14.9"
+    implementation "org.slf4j:slf4j-api:1.7.30"
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.2'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.12.3'
+//    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.12.2'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
