@@ -1,0 +1,18 @@
+.gradle/
+.idea/
+build/
+*.iml
+*.ipr
+*.iws
+*.class
+bin/
+gen/
+out/
+test.properties
+local.properties
+*.DS_STORE
+
+# GitHub Actions #
+##################
+.github/.release
+src/test/resources/sdk-specifications

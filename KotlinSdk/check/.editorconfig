@@ -1,0 +1,7 @@
+root = true
+
+[*.{kt, kts}]
+ij_kotlin_imports_layout = *,java.**,javax.**,kotlin.**,^
+indent_size = 4
+ij_kotlin_keep_blank_lines_in_declarations = 1
+ij_kotlin_keep_blank_lines_in_code = 1
